@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,38 +24,60 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
     return Results.NotFound("Game does not exist. Please call Game first");
   }
 
-  if (guessDetails.Guess.Length != 5) {
+  var guess = guessDetails.Guess.ToUpper();
+  if (guess.Length != 5) {
     return Results.BadRequest("Guesses must be 5 letters long");
   }
 
   if (game.Guess1 is null) {
-    game.Guess1 = guessDetails.Guess;
+    game.Guess1 = guess;
   }
   else if (game.Guess2 is null) {
-    game.Guess2 = guessDetails.Guess;
+    game.Guess2 = guess;
   }
   else if (game.Guess3 is null) {
-    game.Guess3 = guessDetails.Guess;
+    game.Guess3 = guess;
   }
   else if (game.Guess4 is null) {
-    game.Guess4 = guessDetails.Guess;
+    game.Guess4 = guess;
   }
   else if (game.Guess5 is null) {
-    game.Guess5 = guessDetails.Guess;
+    game.Guess5 = guess;
   }
   else if (game.Guess6 is null) {
-    game.Guess6 = guessDetails.Guess;
+    game.Guess6 = guess;
+    game.State = GameStates.LOST;
   }
   else 
   {
     return Results.BadRequest("You have already had 6 guesses at getting this word.");
   }
 
+  if (game.Word == guess) {
+    game.State = GameStates.WON;
+  }
+
   await db.SaveChangesAsync();
 
-  // TODO: Return matching letters
+  var score = "";
+  for (var i = 0; i < 5; i++)
+  {
+    if (guess[i] == game.Word[i]) {
+      score += "G";
+    }
+    else if (game.Word.Contains(guess[i])) {
+      score += "Y";
+    }
+    else
+    {
+      score += " ";
+    }
+  }
 
-  return Results.Ok();
+  return Results.Ok(new NewMoveResponse(){
+    Score = score,
+    State = game.State
+  });
 });
 
 
@@ -73,6 +94,7 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
   {
     Id = Guid.NewGuid().ToString(),
     TeamId = team.Id,
+    State = GameStates.INPROGRESS,
     Word = ""  // TODO:  Pick a random word
   };
 
