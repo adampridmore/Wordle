@@ -25,35 +25,45 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
   }
 
   var guess = guessDetails.Guess.ToUpper();
-  if (guess.Length != 5) {
+  if (guess.Length != 5)
+  {
     return Results.BadRequest("Guesses must be 5 letters long");
   }
 
-  if (game.Guess1 is null) {
+  // TODO: Check if guess is a real word
+
+  if (game.Guess1 is null)
+  {
     game.Guess1 = guess;
   }
-  else if (game.Guess2 is null) {
+  else if (game.Guess2 is null)
+  {
     game.Guess2 = guess;
   }
-  else if (game.Guess3 is null) {
+  else if (game.Guess3 is null)
+  {
     game.Guess3 = guess;
   }
-  else if (game.Guess4 is null) {
+  else if (game.Guess4 is null)
+  {
     game.Guess4 = guess;
   }
-  else if (game.Guess5 is null) {
+  else if (game.Guess5 is null)
+  {
     game.Guess5 = guess;
   }
-  else if (game.Guess6 is null) {
+  else if (game.Guess6 is null)
+  {
     game.Guess6 = guess;
     game.State = GameStates.LOST;
   }
-  else 
+  else
   {
     return Results.BadRequest("You have already had 6 guesses at getting this word.");
   }
 
-  if (game.Word == guess) {
+  if (game.Word == guess)
+  {
     game.State = GameStates.WON;
   }
 
@@ -62,10 +72,12 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
   var score = "";
   for (var i = 0; i < 5; i++)
   {
-    if (guess[i] == game.Word[i]) {
+    if (guess[i] == game.Word[i])
+    {
       score += "G";
     }
-    else if (game.Word.Contains(guess[i])) {
+    else if (game.Word.Contains(guess[i]))
+    {
       score += "Y";
     }
     else
@@ -74,7 +86,8 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
     }
   }
 
-  return Results.Ok(new NewMoveResponse(){
+  return Results.Ok(new NewMoveResponse()
+  {
     Score = score,
     State = game.State
   });
@@ -90,18 +103,24 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
     return Results.NotFound("Team does not exist. Please call Team first");
   }
 
+  var lines = File.ReadAllLines("words.txt");
+  var r = new Random();
+  var randomLineNumber = r.Next(0, lines.Length - 1);
+  var word = lines[randomLineNumber];
+
   var game = new Game()
   {
     Id = Guid.NewGuid().ToString(),
     TeamId = team.Id,
     State = GameStates.INPROGRESS,
-    Word = ""  // TODO:  Pick a random word
+    Word = word
   };
 
   db.Games.Add(game);
   await db.SaveChangesAsync();
 
-  var result = new NewGameResponse() {
+  var result = new NewGameResponse()
+  {
     GameId = game.Id
   };
 
@@ -124,7 +143,8 @@ app.MapPost("/team", async (NewTeam teamDetails, WordleDb db) =>
     await db.SaveChangesAsync();
   }
 
-  var result = new NewTeamResponse() {
+  var result = new NewTeamResponse()
+  {
     Id = team.Id,
     Name = teamDetails.Name
   };
@@ -133,10 +153,10 @@ app.MapPost("/team", async (NewTeam teamDetails, WordleDb db) =>
 })
   .WithName("RegisterTeam")
   .WithOpenApi(operation => new(operation)
-    {
-      Summary = "Register your team with the server",
-      Description = "The name of the team must be unique.  If the team already exists then the existing ID will be returned."
-    });
+  {
+    Summary = "Register your team with the server",
+    Description = "The name of the team must be unique.  If the team already exists then the existing ID will be returned."
+  });
 
 
 app.Run();

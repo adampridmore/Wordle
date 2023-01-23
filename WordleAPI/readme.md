@@ -1,7 +1,7 @@
 ## TODO
 
-Add random words
 Add tests
+Check guess is a real word
 Nullable / Non-nullable fields in api models
 Nullable / Non-nullable fields in database models
 Enums in database models
