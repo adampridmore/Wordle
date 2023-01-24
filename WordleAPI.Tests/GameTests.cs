@@ -40,7 +40,7 @@ public class GameTests : BaseTest
       // Then the game is added to the database.
       var createdGame = context!.Games.First();
       // Assert.Equal(createdGame.Team.Id, VALID_TEAM_ID);
-      Assert.Equal(createdGame.State, "INPROGRESS");
+      Assert.Equal(createdGame.State, GameState.InProgress);
       Assert.NotNull(createdGame.Word);
       Assert.Null(createdGame.Guess1);
       Assert.Null(createdGame.Guess2);

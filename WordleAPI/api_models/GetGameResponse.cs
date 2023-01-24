@@ -8,6 +8,6 @@ class GetGameResponse
 {
       public Guid GameId { get; set; }
       public string Word { get; set; } = "";  // Only populated when state!=inprogress
-      public string State { get; set; } = ""; //TODO: Use enum
+      public GameState State { get; set; } = GameState.InProgress;
       public GetGameScoreResponse[] Guesses { get; set; } = new GetGameScoreResponse[]{};
 }

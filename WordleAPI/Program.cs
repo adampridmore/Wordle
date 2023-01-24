@@ -30,6 +30,15 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
     return Results.BadRequest("Guesses must be 5 letters long");
   }
 
+  if (game.State == GameState.Won) {
+    return Results.BadRequest("You have already won this game.");
+  }
+
+  if (game.State == GameState.Lost) {
+    return Results.BadRequest("You have already lost this game.");
+  }
+  
+
   // TODO: Check if guess is a real word
 
   if (game.Guess1 is null)
@@ -55,7 +64,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
   else if (game.Guess6 is null)
   {
     game.Guess6 = guess;
-    game.State = GameStates.LOST;
+    game.State = GameState.Lost;
   }
   else
   {
@@ -64,7 +73,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
 
   if (game.Word == guess)
   {
-    game.State = GameStates.WON;
+    game.State = GameState.Won;
   }
 
   await db.SaveChangesAsync();
@@ -112,7 +121,7 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
   {
     Id = Guid.NewGuid(),
     Team = team,
-    State = GameStates.INPROGRESS,
+    State = GameState.InProgress,
     Word = word
   };
 

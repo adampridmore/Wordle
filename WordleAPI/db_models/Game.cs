@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-public static class GameStates
+public enum GameState
 {
-      public const string INPROGRESS = "INPROGRESS";
-      public const string WON = "WON";
-      public const string LOST = "LOST";
+     InProgress,
+     Won,
+     Lost
 }
 
 public class Game
@@ -19,7 +19,7 @@ public class Game
       public string Word { get; set; } = "";
       
       [Required]
-      public string State { get; set; } = "";  //TODO: Use enum
+      public GameState State { get; set; } = GameState.InProgress;
       public string? Guess1 { get; set; }
       public string? Guess2 { get; set; }
       public string? Guess3 { get; set; }

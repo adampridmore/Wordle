@@ -1,6 +1,6 @@
 class NewMoveResponse
 {
     public string Score { get; set; } = "";
-    public string State { get; set; } = "";
+    public GameState State { get; set; } = GameState.InProgress;
 
 }
