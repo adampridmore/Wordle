@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-class WordleDb : DbContext
+public class WordleDb : DbContext
 {
     public WordleDb(DbContextOptions<WordleDb> options)
         : base(options) { }

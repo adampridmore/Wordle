@@ -160,3 +160,6 @@ app.MapPost("/team", async (NewTeam teamDetails, WordleDb db) =>
 
 
 app.Run();
+
+public partial class Program
+{ }

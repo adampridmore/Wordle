@@ -1,11 +1,11 @@
-static class GameStates
+public static class GameStates
 {
       public const string INPROGRESS = "INPROGRESS";
       public const string WON = "WON";
       public const string LOST = "LOST";
 }
 
-class Game
+public class Game
 {
       public string Id { get; set; } = "";
       public string TeamId { get; set; } = "";
