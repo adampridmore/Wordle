@@ -103,15 +103,15 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
     return Results.NotFound("Team does not exist. Please call Team first");
   }
 
-  var lines = File.ReadAllLines("words.txt");
+  var lines = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt");
   var r = new Random();
   var randomLineNumber = r.Next(0, lines.Length - 1);
   var word = lines[randomLineNumber];
 
   var game = new Game()
   {
-    Id = Guid.NewGuid().ToString(),
-    TeamId = team.Id,
+    Id = Guid.NewGuid(),
+    Team = team,
     State = GameStates.INPROGRESS,
     Word = word
   };
@@ -135,7 +135,7 @@ app.MapPost("/team", async (NewTeam teamDetails, WordleDb db) =>
   {
     team = new Team()
     {
-      Id = Guid.NewGuid().ToString(),
+      Id = Guid.NewGuid(),
       Name = teamDetails.Name
     };
 

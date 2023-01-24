@@ -23,7 +23,8 @@ public class TestWebApplicationFactory<TProgram>
       services.AddDbContext<WordleDb>(options =>
           {
           var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-          options.UseSqlite($"Data Source={Path.Join(path, "Wordle_tests.db")}");
+          var full = Path.Join(path, $"Wordle_tests.db");
+          options.UseSqlite($"Data Source={full}");
         });
     });
 

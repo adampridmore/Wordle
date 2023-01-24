@@ -6,7 +6,6 @@ using Xunit;
 
 namespace WordleAPI.Tests;
 
-[Collection("NewTeamTests")]
 public class NewTeamTests : BaseTest
 {
   public NewTeamTests(TestWebApplicationFactory<Program> factory) : base(factory) { }
@@ -41,11 +40,12 @@ public class NewTeamTests : BaseTest
   [Fact]
   public async Task ReRegisterExistingTeam()
   {
+    var teamId = Guid.NewGuid();
     var client = await Given(context =>
     {
       context.Teams.Add(new Team
       {
-        Id = "existing id",
+        Id = teamId,
         Name = "Test title"
       });
     });
@@ -59,6 +59,6 @@ public class NewTeamTests : BaseTest
     var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
     Assert.NotNull(detail);
     Assert.Equal("Test title", detail.Name);
-    Assert.Equal("existing id", detail.Id);
+    Assert.Equal(teamId, detail.Id);
   }
 }

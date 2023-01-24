@@ -1,4 +1,4 @@
 public class NewGame
 {
-    public string TeamId { get; set; } = "";
+    public Guid TeamId { get; set; }
 }
