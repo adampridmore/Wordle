@@ -9,24 +9,24 @@ namespace WordleAPI.Tests.Helpers;
 public class TestWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
-    protected override IHost CreateHost(IHostBuilder builder)
+  protected override IHost CreateHost(IHostBuilder builder)
+  {
+    builder.ConfigureServices(services =>
     {
-        builder.ConfigureServices(services =>
-        {
-            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<WordleDb>));
+      var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<WordleDb>));
 
-            if (descriptor != null)
-            {
-                services.Remove(descriptor);
-            }
+      if (descriptor != null)
+      {
+        services.Remove(descriptor);
+      }
 
-            services.AddDbContext<WordleDb>(options =>
-            {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                options.UseSqlite($"Data Source={Path.Join(path, "Wordle_tests.db")}");
-            });
+      services.AddDbContext<WordleDb>(options =>
+          {
+          var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+          options.UseSqlite($"Data Source={Path.Join(path, "Wordle_tests.db")}");
         });
+    });
 
-        return base.CreateHost(builder);
-    }
+    return base.CreateHost(builder);
+  }
 }
