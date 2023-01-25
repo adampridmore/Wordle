@@ -22,7 +22,7 @@ public class GameTests : BaseTest
     });
 
     // Then the details of the game are returned
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    await ThenOKIsReturned(response);
     var detail = await response.Content.ReadFromJsonAsync<NewGameResponse>();
     Assert.NotNull(detail);
     // Assert.Equal(createdGame.Id, detail.GameId);
@@ -56,6 +56,7 @@ public class GameTests : BaseTest
       TeamId = INVALID_TEAM_ID
     });
 
-    Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    await ThenNotFoundIsReturned(response, "Team does not exist. Please call Team first.");
+
   }
 }

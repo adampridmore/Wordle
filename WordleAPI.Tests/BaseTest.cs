@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using WordleAPI.Tests.Helpers;
 using Xunit;
@@ -38,8 +40,8 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     using (var scope = _factory.Services.CreateScope())
     {
       var db = scope.ServiceProvider.GetService<WordleDb>();
-      var result = builder(db);
-      await db.SaveChangesAsync();
+      var result = builder(db!);
+      await db!.SaveChangesAsync();
       return result;
     }
   }
@@ -52,8 +54,8 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     return client;
   }
 
-  protected async Task<Game> GivenAGame(string word, 
-                                        string[]? wrongGuesses = null)
+  protected async Task<Game> GivenAGame(string word,
+                                        Action<Game>? builder = null)
   {
     return await Given(context =>
     {
@@ -71,22 +73,11 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
         Word = word
       };
 
-      if (wrongGuesses is not null)
+      if (builder is not null)
       {
-        if (wrongGuesses.Length > 0)
-          game.Guess1 = wrongGuesses[0];
-        if (wrongGuesses.Length > 1)
-          game.Guess2 = wrongGuesses[1];
-        if (wrongGuesses.Length > 2)
-          game.Guess3 = wrongGuesses[2];
-        if (wrongGuesses.Length > 3)
-          game.Guess4 = wrongGuesses[3];
-        if (wrongGuesses.Length > 4)
-          game.Guess5 = wrongGuesses[4];
-        if (wrongGuesses.Length > 5)
-          game.Guess6 = wrongGuesses[5];
+        builder(game);
       }
-
+      
       context.Games.Add(game);
       return game;
     });
@@ -104,6 +95,30 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
       context.Teams.Add(team);
       return team;
     });
+  }
+
+  protected static async Task ThenOKIsReturned(HttpResponseMessage response)
+  {
+    if (response.StatusCode != HttpStatusCode.OK)
+    {
+      var detail = await response.Content.ReadAsStringAsync();
+      Assert.Fail(detail);
+    }
+  }
+
+  protected static async Task ThenBadRequestIsReturned(HttpResponseMessage response, string expectedMessage)
+  {
+    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    var detail = await response.Content.ReadFromJsonAsync<string>();
+    Assert.Equal(expectedMessage, detail);
+  }
+
+
+  protected static async Task ThenNotFoundIsReturned(HttpResponseMessage response, string expectedMessage)
+  {
+    Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    var detail = await response.Content.ReadFromJsonAsync<string>();
+    Assert.Equal(expectedMessage, detail);
   }
 
 }

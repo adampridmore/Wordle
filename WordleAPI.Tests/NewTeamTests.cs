@@ -23,7 +23,7 @@ public class NewTeamTests : BaseTest
     });
 
     Then(async context => {
-      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+      await ThenOKIsReturned(response);
 
       // Then the team is added to the database.
       var createdTeam = context.Teams.First();
@@ -59,7 +59,8 @@ public class NewTeamTests : BaseTest
       Name = "Test title"
     });
 
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    await ThenOKIsReturned(response);
+
     var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
     Assert.NotNull(detail);
     Assert.Equal("Test title", detail.Name);

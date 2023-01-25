@@ -21,7 +21,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
                            .FirstOrDefaultAsync();
   if (game is null)
   {
-    return Results.NotFound("Game does not exist. Please call Game first");
+    return Results.NotFound("Game does not exist. Please call Game first.");
   }
 
   var guess = guessDetails.Guess.ToUpper();
@@ -44,8 +44,12 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
   if (!words.Contains(guess)) 
     return Results.BadRequest("Your guess is not a valid word");
 
-
-  // TODO: Check if guess is a real word
+  if ((game.Guess1 == guess) ||
+      (game.Guess2 == guess) ||
+      (game.Guess3 == guess) ||
+      (game.Guess4 == guess) ||
+      (game.Guess5 == guess))
+    return Results.BadRequest("You have already guessed this word.");
 
   if (game.Guess1 is null)
   {
@@ -115,7 +119,7 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
                            .FirstOrDefaultAsync();
   if (team is null)
   {
-    return Results.NotFound("Team does not exist. Please call Team first");
+    return Results.NotFound("Team does not exist. Please call Team first.");
   }
 
   var lines = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt");

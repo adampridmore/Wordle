@@ -13,46 +13,44 @@ public class GuessTests : BaseTest
   [Fact]
   public async Task GuessesMustBeFiveLetters()
   {
-    var game = await GivenAGame("APPLE");
+    var game = await GivenAGame(word:"APPLE");
 
-    var response = await WhenAGuessIsMade(game, "ABC");
+    var response = await WhenAGuessIsMade(game, guess:"ABC");
 
-    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-    var detail = await response.Content.ReadFromJsonAsync<string>();
-    Assert.Equal("Guesses must be 5 letters long", detail);
+    await ThenBadRequestIsReturned(response, "Guesses must be 5 letters long");
   }
 
   [Fact]
   public async Task GuessesMustBeValidWords()
   {
-    var game = await GivenAGame("APPLE");
+    var game = await GivenAGame(word:"APPLE");
 
-    var response = await WhenAGuessIsMade(game, "ABCDE");
+    var response = await WhenAGuessIsMade(game, guess:"ABCDE");
 
-    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-    var detail = await response.Content.ReadFromJsonAsync<string>();
-    Assert.Equal("Your guess is not a valid word", detail);
+    await ThenBadRequestIsReturned(response, "Your guess is not a valid word");
   }
+
 
   [Fact]
   public async Task CorrectLettersInCorrectPositionsAreMarkedGreen()
   {
-    var game = await GivenAGame("ABCDE");
+    var game = await GivenAGame(word:"ABCDE");
 
-    var response = await WhenAGuessIsMade(game, "ABOUT");
+    var response = await WhenAGuessIsMade(game, guess:"ABOUT");
 
     await ThenOKIsReturned(response);
 
     var detail = await response.Content.ReadFromJsonAsync<NewGuessResponse>();
     Assert.Equal("GG   ", detail!.Score);
+    Assert.Equal(GameState.InProgress, detail.State);
   }
 
   [Fact]
   public async Task CorrectLettersInWrongPositionsAreMarkedYellow()
   {
-    var game = await GivenAGame("EXXXA");
+    var game = await GivenAGame(word:"EXXXA");
 
-    var response = await WhenAGuessIsMade(game, "APPLE");
+    var response = await WhenAGuessIsMade(game, guess:"APPLE");
 
     await ThenOKIsReturned(response);
 
@@ -62,11 +60,11 @@ public class GuessTests : BaseTest
   }
 
   [Fact]
-  public async Task AGameCanBeWon()
+  public async Task AGameCanBeWonWithTheCorrectGuess()
   {
-    var game = await GivenAGame("APPLE");
+    var game = await GivenAGame(word:"APPLE");
 
-    var response = await WhenAGuessIsMade(game, "APPLE");
+    var response = await WhenAGuessIsMade(game, guess:"APPLE");
 
     await ThenOKIsReturned(response);
 
@@ -76,12 +74,20 @@ public class GuessTests : BaseTest
   }
 
   [Fact]
-  public async Task AGameCanBeLost()
+  public async Task AGameIsLostAfterSixWrongGuesses()
   {
-    var game = await GivenAGame("ABCDE",
-                                wrongGuesses: new string[]{"AAAAA","AAAAA","AAAAA","AAAAA","AAAAA"});
+    const string ANY_WRONG_GUESS = "VWXYZ";
+    var game = await GivenAGame(word: "ABCDE",
+                                with =>
+                                {
+                                  with.Guess1 = ANY_WRONG_GUESS;
+                                  with.Guess2 = ANY_WRONG_GUESS;
+                                  with.Guess3 = ANY_WRONG_GUESS;
+                                  with.Guess4 = ANY_WRONG_GUESS;
+                                  with.Guess5 = ANY_WRONG_GUESS;
+                                });
 
-    var response = await WhenAGuessIsMade(game, "APPLE");
+    var response = await WhenAGuessIsMade(game, guess:"APPLE");
 
     await ThenOKIsReturned(response);
 
@@ -89,6 +95,67 @@ public class GuessTests : BaseTest
     Assert.Equal("G   G", detail!.Score);
     Assert.Equal(GameState.Lost, detail.State);
   }
+
+  [Fact]
+  public async Task AGuessCannotBeMadeForAGameWhichHasBeenWon()
+  {
+    var game = await GivenAGame(word: "APPLE",
+                                with =>
+                                {
+                                  with.Guess1 = "APPLE";
+                                  with.State = GameState.Won;
+                                });
+
+    var response = await WhenAGuessIsMade(game, guess:"APPLE");
+
+    await ThenBadRequestIsReturned(response, "You have already won this game.");
+  }
+
+  [Fact]
+  public async Task AGuessCannotBeMadeForAGameWhichHasBeenLost()
+  {
+    const string ANY_WRONG_GUESS = "VWXYZ";
+    var game = await GivenAGame(word: "APPLE",
+                                with =>
+                                {
+                                  with.Guess1 = ANY_WRONG_GUESS;
+                                  with.Guess2 = ANY_WRONG_GUESS;
+                                  with.Guess3 = ANY_WRONG_GUESS;
+                                  with.Guess4 = ANY_WRONG_GUESS;
+                                  with.Guess5 = ANY_WRONG_GUESS;
+                                  with.Guess6 = ANY_WRONG_GUESS;
+                                  with.State = GameState.Lost;
+                                });
+
+    var response = await WhenAGuessIsMade(game, ANY_WRONG_GUESS);
+
+    await ThenBadRequestIsReturned(response, "You have already lost this game.");
+  }
+
+  [Fact]
+  public async Task TheSameGuessCannotBeMadeTwice()
+  {
+    var game = await GivenAGame(word: "ABOUT",
+                                with =>
+                                {
+                                  with.Guess1 = "APPLE";
+                                });
+
+    var response = await WhenAGuessIsMade(game, guess:"APPLE");
+
+    await ThenBadRequestIsReturned(response, "You have already guessed this word.");
+  }
+
+  [Fact]
+  public async Task TheGameMustExist()
+  {
+    var gameNotInDatabase = new Game();
+
+    var response = await WhenAGuessIsMade(gameNotInDatabase, guess:"APPLE");
+
+    await ThenNotFoundIsReturned(response, "Game does not exist. Please call Game first.");
+  }
+
 
   private async Task<HttpResponseMessage> WhenAGuessIsMade(Game game, string guess)
   {
@@ -100,19 +167,6 @@ public class GuessTests : BaseTest
     });
     return response;
   }
-
-  private static async Task ThenOKIsReturned(HttpResponseMessage response)
-  {
-    if (response.StatusCode != HttpStatusCode.OK)
-    {
-      var detail = await response.Content.ReadAsStringAsync();
-      Assert.Fail(detail);
-    }
-  }
 }
 
-
-// Duplicate Guess
-// Guess when game has been won
-// Guess when game has been lost
-// Game does not exist
+// Guesses are written to the database
