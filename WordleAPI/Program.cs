@@ -5,6 +5,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WordleDb>(opt => opt.UseInMemoryDatabase("WordleServer"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddSingleton(typeof(Words));
 var app = builder.Build();
 
 app.UseSwagger();
@@ -15,7 +16,7 @@ app.MapGet("/", () => "WordleAPI!");
 
 // Get Game
 
-app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
+app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db, Words words) =>
 {
   var game = await db.Games.Where(t => t.Id == guessDetails.GameId)
                            .FirstOrDefaultAsync();
@@ -38,10 +39,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
     return Results.BadRequest("You have already lost this game.");
   }
   
-  var words = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt")
-                  .Select(word => word.ToUpper())
-                  .ToHashSet();
-  if (!words.Contains(guess)) 
+  if (!words.WordExists(guess)) 
     return Results.BadRequest("Your guess is not a valid word");
 
   if ((game.Guess1 == guess) ||
@@ -113,7 +111,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
 });
 
 
-app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
+app.MapPost("/game", async (NewGame gameDetails, WordleDb db, Words words) =>
 {
   var team = await db.Teams.Where(t => t.Id == gameDetails.TeamId)
                            .FirstOrDefaultAsync();
@@ -122,17 +120,12 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db) =>
     return Results.NotFound("Team does not exist. Please call Team first.");
   }
 
-  var lines = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt");
-  var r = new Random();
-  var randomLineNumber = r.Next(0, lines.Length - 1);
-  var word = lines[randomLineNumber];
-
   var game = new Game()
   {
     Id = Guid.NewGuid(),
     Team = team,
     State = GameState.InProgress,
-    Word = word
+    Word = words.RandomWord()
   };
 
   db.Games.Add(game);
