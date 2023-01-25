@@ -52,7 +52,8 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     return client;
   }
 
-  protected async Task<Game> GivenAGame(string word)
+  protected async Task<Game> GivenAGame(string word, 
+                                        string[]? wrongGuesses = null)
   {
     return await Given(context =>
     {
@@ -69,6 +70,22 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
         Team = team,
         Word = word
       };
+
+      if (wrongGuesses is not null)
+      {
+        if (wrongGuesses.Length > 0)
+          game.Guess1 = wrongGuesses[0];
+        if (wrongGuesses.Length > 1)
+          game.Guess2 = wrongGuesses[1];
+        if (wrongGuesses.Length > 2)
+          game.Guess3 = wrongGuesses[2];
+        if (wrongGuesses.Length > 3)
+          game.Guess4 = wrongGuesses[3];
+        if (wrongGuesses.Length > 4)
+          game.Guess5 = wrongGuesses[4];
+        if (wrongGuesses.Length > 5)
+          game.Guess6 = wrongGuesses[5];
+      }
 
       context.Games.Add(game);
       return game;

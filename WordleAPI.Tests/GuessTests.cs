@@ -58,6 +58,36 @@ public class GuessTests : BaseTest
 
     var detail = await response.Content.ReadFromJsonAsync<NewGuessResponse>();
     Assert.Equal("Y   Y", detail!.Score);
+    Assert.Equal(GameState.InProgress, detail.State);
+  }
+
+  [Fact]
+  public async Task AGameCanBeWon()
+  {
+    var game = await GivenAGame("APPLE");
+
+    var response = await WhenAGuessIsMade(game, "APPLE");
+
+    await ThenOKIsReturned(response);
+
+    var detail = await response.Content.ReadFromJsonAsync<NewGuessResponse>();
+    Assert.Equal("GGGGG", detail!.Score);
+    Assert.Equal(GameState.Won, detail.State);
+  }
+
+  [Fact]
+  public async Task AGameCanBeLost()
+  {
+    var game = await GivenAGame("ABCDE",
+                                wrongGuesses: new string[]{"AAAAA","AAAAA","AAAAA","AAAAA","AAAAA"});
+
+    var response = await WhenAGuessIsMade(game, "APPLE");
+
+    await ThenOKIsReturned(response);
+
+    var detail = await response.Content.ReadFromJsonAsync<NewGuessResponse>();
+    Assert.Equal("G   G", detail!.Score);
+    Assert.Equal(GameState.Lost, detail.State);
   }
 
   private async Task<HttpResponseMessage> WhenAGuessIsMade(Game game, string guess)
@@ -85,6 +115,4 @@ public class GuessTests : BaseTest
 // Duplicate Guess
 // Guess when game has been won
 // Guess when game has been lost
-// Game can be won
-// Game can be lost
 // Game does not exist
