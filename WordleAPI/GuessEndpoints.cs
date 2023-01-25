@@ -4,7 +4,7 @@ public static class GuessEndpoints
 {
   public static IEndpointRouteBuilder MapGuessEndpoints(this IEndpointRouteBuilder endpoints)
   {
-    endpoints.MapPost("/guess", async (NewGuess guessDetails, WordleDb db, Words words) =>
+    endpoints.MapPost("/guess", async (NewGuess guessDetails, WordleDb db, Scorer scorer, Words words) =>
     {
       var game = await db.Games.Where(t => t.Id == guessDetails.GameId)
                              .FirstOrDefaultAsync();
@@ -81,22 +81,7 @@ public static class GuessEndpoints
 
       await db.SaveChangesAsync();
 
-      var score = "";
-      for (var i = 0; i < 5; i++)
-      {
-        if (guess[i] == game.Word[i])
-        {
-          score += "G";
-        }
-        else if (game.Word.Contains(guess[i]))
-        {
-          score += "Y";
-        }
-        else
-        {
-          score += " ";
-        }
-      }
+      var score = scorer.ScoreGuess(game.Word, guess);
 
       return Results.Ok(new NewGuessResponse()
       {
@@ -107,4 +92,6 @@ public static class GuessEndpoints
 
     return endpoints;
   }
+
+
 }

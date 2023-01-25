@@ -6,6 +6,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WordleDb>(opt => opt.UseInMemoryDatabase("WordleServer"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddSingleton(typeof(Words));
+builder.Services.AddSingleton(typeof(Scorer));
 
 var app = builder.Build();
 app.UseSwagger();
@@ -18,6 +19,8 @@ app.MapGuessEndpoints();
 app.MapGet("/", () => "WordleAPI!");
 
 app.Run();
+
+
 
 public partial class Program
 { }

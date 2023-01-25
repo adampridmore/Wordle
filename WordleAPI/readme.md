@@ -1,6 +1,7 @@
 ## TODO
 
-Implement get game method
+Add test for get game when the game doesn't exist
+How are duplicate letters scored?
 Swagger
 SQL Server
 Deploy to Azure?

@@ -57,6 +57,51 @@ public class GameTests : BaseTest
     });
 
     await ThenNotFoundIsReturned(response, "Team does not exist. Please call Team first.");
+  }
+
+  [Fact]
+  public async Task AGameCanBeRetrieved()
+  {
+    var game = await GivenAGame(word: "ABCDE",
+                                with =>
+                                {
+                                  with.Guess1 = "AAAAA";
+                                  with.Guess2 = "BBBBB";
+                                  with.Guess3 = "CCCCC";
+                                  with.Guess4 = "DDDDD";
+                                  with.Guess5 = "EEEEE";
+                                  with.Guess6 = "FFFFF";
+                                  with.State = GameState.Lost;
+                                });
+
+    var client = Client();
+
+    var actualGame = await client.GetFromJsonAsync<GetGameResponse>($"/game/{game.Id}");
+
+    Assert.NotNull(actualGame);
+    Assert.Equal(game.Id, actualGame.GameId);
+    Assert.Equal("ABCDE", actualGame.Word);
+    Assert.Equal(GameState.Lost, actualGame.State);
+
+    Assert.Equal("AAAAA", actualGame.Guesses[0].Guess);
+    Assert.Equal("GYYYY", actualGame.Guesses[0].Score);
+
+    Assert.Equal("BBBBB", actualGame.Guesses[1].Guess);
+    Assert.Equal("YGYYY", actualGame.Guesses[1].Score);
+
+    Assert.Equal("CCCCC", actualGame.Guesses[2].Guess);
+    Assert.Equal("YYGYY", actualGame.Guesses[2].Score);
+
+    Assert.Equal("DDDDD", actualGame.Guesses[3].Guess);
+    Assert.Equal("YYYGY", actualGame.Guesses[3].Score);
+
+    Assert.Equal("EEEEE", actualGame.Guesses[4].Guess);
+    Assert.Equal("YYYYG", actualGame.Guesses[4].Score);
+
+    Assert.Equal("FFFFF", actualGame.Guesses[5].Guess);
+    Assert.Equal("     ", actualGame.Guesses[5].Score);
 
   }
+
+  // Game does not exist
 }
