@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Http;
 using WordleAPI.Tests.Helpers;
@@ -22,20 +21,19 @@ public class NewTeamTests : BaseTest
       Name = "Test title"
     });
 
-    Then(async context => {
-      await ThenOKIsReturned(response);
+    await ThenOKIsReturned(response);
+    
+    // Then the details of the team are returned
+    var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
+    Assert.NotNull(detail);
 
+    Then(context => {
       // Then the team is added to the database.
       var createdTeam = context.Teams.First();
       Assert.Equal(createdTeam.Name, "Test title");
-
-      // Then the details of the team are returned
-      var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
-      Assert.NotNull(detail);
       Assert.Equal("Test title", detail.Name);
       Assert.Equal(createdTeam.Id, detail.Id);
     });
-
   }
 
   [Fact]

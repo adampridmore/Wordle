@@ -157,6 +157,32 @@ public class GuessTests : BaseTest
   }
 
 
+  [Fact]
+  public async Task GuessesAreWrittenToTheDatabase()
+  {
+    const string ANY_WRONG_GUESS = "VWXYZ";
+    var game = await GivenAGame(word: "ABCDE",
+                                with =>
+                                {
+                                  with.Guess1 = ANY_WRONG_GUESS;
+                                  with.Guess2 = ANY_WRONG_GUESS;
+                                  with.Guess3 = ANY_WRONG_GUESS;
+                                  with.Guess4 = ANY_WRONG_GUESS;
+                                });
+
+    var response = await WhenAGuessIsMade(game, guess:"APPLE");
+
+    await ThenOKIsReturned(response);
+
+    Then(check => {
+      var actualGame = check.Games.First(g => g.Id == game.Id);
+      Assert.Equal(ANY_WRONG_GUESS, actualGame.Guess4);
+      Assert.Equal("APPLE", actualGame.Guess5);
+      Assert.Null(actualGame.Guess6);
+      Assert.Equal(GameState.InProgress, actualGame.State);
+    });
+  }
+
   private async Task<HttpResponseMessage> WhenAGuessIsMade(Game game, string guess)
   {
     var client = Client();
@@ -168,5 +194,3 @@ public class GuessTests : BaseTest
     return response;
   }
 }
-
-// Guesses are written to the database
