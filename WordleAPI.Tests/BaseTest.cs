@@ -14,6 +14,14 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
   {
     _factory = factory;
     _httpClient = factory.CreateClient();
+
+    using (var scope = _factory.Services.CreateScope())
+    {
+      var db = scope.ServiceProvider.GetService<WordleDb>();
+      db!.Database.EnsureDeleted();
+      db.Database.EnsureCreated();
+    }
+
   }
 
   protected void Then(Action<WordleDb> check)
@@ -25,21 +33,14 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     }
   }
 
-  protected async Task Given(Action<WordleDb>? builder = null)
+  protected async Task<T> Given<T>(Func<WordleDb, T> builder) where T : notnull
   {
     using (var scope = _factory.Services.CreateScope())
     {
       var db = scope.ServiceProvider.GetService<WordleDb>();
-      if (db != null)
-      {
-        await db.Database.EnsureDeletedAsync();
-        await db.Database.EnsureCreatedAsync();
-        if (builder is not null)
-        {
-          builder(db);
-        }
-        await db.SaveChangesAsync();
-      }
+      var result = builder(db);
+      await db.SaveChangesAsync();
+      return result;
     }
   }
 
@@ -50,4 +51,42 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
   }).CreateClient();
     return client;
   }
+
+  protected async Task<Game> GivenAGame(string word)
+  {
+    return await Given(context =>
+    {
+      var team = new Team
+      {
+        Id = Guid.NewGuid(),
+        Name = "Team title"
+      };
+      context.Teams.Add(team);
+
+      var game = new Game
+      {
+        Id = Guid.NewGuid(),
+        Team = team,
+        Word = word
+      };
+
+      context.Games.Add(game);
+      return game;
+    });
+  }
+
+  protected async Task<Team> GivenATeam()
+  {
+    return await Given(context =>
+    {
+      var team = new Team
+      {
+        Id = Guid.NewGuid(),
+        Name = "Team title"
+      };
+      context.Teams.Add(team);
+      return team;
+    });
+  }
+
 }

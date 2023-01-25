@@ -39,6 +39,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
   }
   
   var words = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt")
+                  .Select(word => word.ToUpper())
                   .ToHashSet();
   if (!words.Contains(guess)) 
     return Results.BadRequest("Your guess is not a valid word");

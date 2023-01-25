@@ -23,12 +23,13 @@ public class NewTeamTests : BaseTest
     });
 
     Then(async context => {
+      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
       // Then the team is added to the database.
-      var createdTeam = context!.Teams.First();
+      var createdTeam = context.Teams.First();
       Assert.Equal(createdTeam.Name, "Test title");
 
       // Then the details of the team are returned
-      Assert.Equal(HttpStatusCode.OK, response.StatusCode);
       var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
       Assert.NotNull(detail);
       Assert.Equal("Test title", detail.Name);
@@ -43,11 +44,13 @@ public class NewTeamTests : BaseTest
     var teamId = Guid.NewGuid();
     await Given(context =>
     {
-      context.Teams.Add(new Team
+      var team = new Team
       {
         Id = teamId,
         Name = "Test title"
-      });
+      };
+      context.Teams.Add(team);
+      return team;
     });
 
     var client = Client();

@@ -13,21 +13,12 @@ public class GameTests : BaseTest
   [Fact]
   public async Task CreateNewGame()
   {
-    var VALID_TEAM_ID = Guid.NewGuid();
-    await Given(context =>
-    {
-      context.Teams.Add(new Team
-      {
-        Id = VALID_TEAM_ID,
-        Name = "Team title"
-      });
-    });
-
+    var team = await GivenATeam();
 
     var client = Client();
     var response = await client.PostAsJsonAsync("/game", new NewGame
     {
-      TeamId = VALID_TEAM_ID
+      TeamId = team.Id
     });
 
     // Then the details of the game are returned
@@ -50,9 +41,7 @@ public class GameTests : BaseTest
       Assert.Null(createdGame.Guess4);
       Assert.Null(createdGame.Guess5);
       Assert.Null(createdGame.Guess6);
-
     });
-
   }
 
   [Fact]
