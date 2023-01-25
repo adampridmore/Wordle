@@ -14,7 +14,7 @@ public class NewTeamTests : BaseTest
   [Fact]
   public async Task RegisterNewTeam()
   {
-    var client = await Given();
+    var client = Client();
 
     // When a new team is registered
     var response = await client.PostAsJsonAsync("/team", new NewTeam
@@ -41,7 +41,7 @@ public class NewTeamTests : BaseTest
   public async Task ReRegisterExistingTeam()
   {
     var teamId = Guid.NewGuid();
-    var client = await Given(context =>
+    await Given(context =>
     {
       context.Teams.Add(new Team
       {
@@ -50,6 +50,7 @@ public class NewTeamTests : BaseTest
       });
     });
 
+    var client = Client();
     var response = await client.PostAsJsonAsync("/team", new NewTeam
     {
       Name = "Test title"

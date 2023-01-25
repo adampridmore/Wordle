@@ -38,6 +38,11 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
     return Results.BadRequest("You have already lost this game.");
   }
   
+  var words = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt")
+                  .ToHashSet();
+  if (!words.Contains(guess)) 
+    return Results.BadRequest("Your guess is not a valid word");
+
 
   // TODO: Check if guess is a real word
 
@@ -95,7 +100,7 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db) =>
     }
   }
 
-  return Results.Ok(new NewMoveResponse()
+  return Results.Ok(new NewGuessResponse()
   {
     Score = score,
     State = game.State

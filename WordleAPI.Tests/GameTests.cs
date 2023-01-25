@@ -14,7 +14,7 @@ public class GameTests : BaseTest
   public async Task CreateNewGame()
   {
     var VALID_TEAM_ID = Guid.NewGuid();
-    var client = await Given(context =>
+    await Given(context =>
     {
       context.Teams.Add(new Team
       {
@@ -23,6 +23,8 @@ public class GameTests : BaseTest
       });
     });
 
+
+    var client = Client();
     var response = await client.PostAsJsonAsync("/game", new NewGame
     {
       TeamId = VALID_TEAM_ID
@@ -33,9 +35,9 @@ public class GameTests : BaseTest
     var detail = await response.Content.ReadFromJsonAsync<NewGameResponse>();
     Assert.NotNull(detail);
     // Assert.Equal(createdGame.Id, detail.GameId);
- 
+
     // When a new game is created
-    await Then(async context =>
+    Then(context =>
     {
       // Then the game is added to the database.
       var createdGame = context!.Games.First();
@@ -56,7 +58,7 @@ public class GameTests : BaseTest
   [Fact]
   public async Task TheTeamMustBeRegisteredBeforeAGameCanBeCreated()
   {
-    var client = await Given();
+    var client = Client();
 
     // When an attempt is made to create a game for a made up team
     var INVALID_TEAM_ID = Guid.NewGuid();

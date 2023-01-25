@@ -16,16 +16,16 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     _httpClient = factory.CreateClient();
   }
 
-  protected async Task Then(Func<WordleDb, Task> check)
+  protected void Then(Action<WordleDb> check)
   {
     using (var scope = _factory.Services.CreateScope())
     {
       var db = scope.ServiceProvider.GetService<WordleDb>();
-      await check(db!);
+      check(db!);
     }
   }
 
-  protected async Task<HttpClient> Given(Action<WordleDb>? builder = null)
+  protected async Task Given(Action<WordleDb>? builder = null)
   {
     using (var scope = _factory.Services.CreateScope())
     {
@@ -41,8 +41,11 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
         await db.SaveChangesAsync();
       }
     }
+  }
 
-  var client = _factory.WithWebHostBuilder(builder =>
+  protected HttpClient Client()
+  {
+    var client = _factory.WithWebHostBuilder(builder =>
   {
   }).CreateClient();
     return client;

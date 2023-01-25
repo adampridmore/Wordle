@@ -1,4 +1,4 @@
-class NewGuess
+public class NewGuess
 {
     public Guid GameId { get; set; }
 
