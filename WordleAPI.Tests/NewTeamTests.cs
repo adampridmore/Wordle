@@ -13,13 +13,8 @@ public class NewTeamTests : BaseTest
   [Fact]
   public async Task RegisterNewTeam()
   {
-    var client = Client();
-
-    // When a new team is registered
-    var response = await client.PostAsJsonAsync("/team", new NewTeam
-    {
-      Name = "Test title"
-    });
+    const string validTeamName = "Test Title";
+    var response = await WhenTheTeamIsCreated(validTeamName);
 
     await ThenOKIsReturned(response);
     
@@ -27,11 +22,11 @@ public class NewTeamTests : BaseTest
     var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
     Assert.NotNull(detail);
 
+    // Then the team is added to the database.
     Then(context => {
-      // Then the team is added to the database.
       var createdTeam = context.Teams.First();
-      Assert.Equal(createdTeam.Name, "Test title");
-      Assert.Equal("Test title", detail.Name);
+      Assert.Equal(createdTeam.Name, validTeamName);
+      Assert.Equal(validTeamName, detail.Name);
       Assert.Equal(createdTeam.Id, detail.Id);
     });
   }
@@ -40,28 +35,46 @@ public class NewTeamTests : BaseTest
   public async Task ReRegisterExistingTeam()
   {
     var teamId = Guid.NewGuid();
+    const string validTeamName = "Test Title";
     await Given(context =>
     {
       var team = new Team
       {
         Id = teamId,
-        Name = "Test title"
+        Name = validTeamName
       };
       context.Teams.Add(team);
       return team;
     });
 
-    var client = Client();
-    var response = await client.PostAsJsonAsync("/team", new NewTeam
-    {
-      Name = "Test title"
-    });
+    var response = await WhenTheTeamIsCreated(validTeamName);
 
     await ThenOKIsReturned(response);
 
     var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
     Assert.NotNull(detail);
-    Assert.Equal("Test title", detail.Name);
+    Assert.Equal(validTeamName, detail.Name);
     Assert.Equal(teamId, detail.Id);
+  }
+
+  [Theory]
+  [InlineData(null)]
+  [InlineData("")]
+  [InlineData("123456789012345678901234567890123456789012345678901")]
+  public async Task TeamsMustBeGivenTeamNames(string teamNameBeingTested)
+  {
+    var response = await WhenTheTeamIsCreated(teamNameBeingTested);
+
+    await ThenBadRequestIsReturned(response, "The team name must be between 1 and 50 characters.");
+  }
+
+  private async Task<HttpResponseMessage> WhenTheTeamIsCreated(string teamNameBeingTested)
+  {
+    var client = Client();
+    var response = await client.PostAsJsonAsync("/team", new NewTeam
+    {
+      Name = teamNameBeingTested
+    });
+    return response;
   }
 }

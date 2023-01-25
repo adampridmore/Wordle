@@ -20,9 +20,14 @@ app.MapPost("/guess", async (NewGuess guessDetails, WordleDb db, Words words) =>
 {
   var game = await db.Games.Where(t => t.Id == guessDetails.GameId)
                            .FirstOrDefaultAsync();
-  if (game is null)
+  if (game is null || guessDetails.GameId == Guid.Empty)
   {
     return Results.NotFound("Game does not exist. Please call Game first.");
+  }
+
+  if (string.IsNullOrWhiteSpace(guessDetails.Guess))
+  {
+    return Results.BadRequest("A guess must be provided.");
   }
 
   var guess = guessDetails.Guess.ToUpper();
@@ -115,7 +120,7 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db, Words words) =>
 {
   var team = await db.Teams.Where(t => t.Id == gameDetails.TeamId)
                            .FirstOrDefaultAsync();
-  if (team is null)
+  if (team is null || gameDetails.TeamId == Guid.Empty)
   {
     return Results.NotFound("Team does not exist. Please call Team first.");
   }
@@ -141,6 +146,10 @@ app.MapPost("/game", async (NewGame gameDetails, WordleDb db, Words words) =>
 
 app.MapPost("/team", async (NewTeam teamDetails, WordleDb db) =>
 {
+  if (teamDetails.Name is null || teamDetails.Name.Length < 1 || teamDetails.Name.Length > 50) {
+    return Results.BadRequest("The team name must be between 1 and 50 characters.");
+  }
+
   var team = await db.Teams.Where(t => t.Name == teamDetails.Name)
                            .FirstOrDefaultAsync();
   if (team is null)

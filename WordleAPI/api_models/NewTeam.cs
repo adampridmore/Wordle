@@ -1,4 +1,5 @@
 public class NewTeam
 {
-    public string Name { get; set; } = "";
+    /// The name of your team.  Remember to make the name unique to your team!
+    public string? Name { get; set; }
 }
