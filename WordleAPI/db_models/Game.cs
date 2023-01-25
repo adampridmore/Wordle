@@ -16,15 +16,27 @@ public class Game
       public Team? Team { get; set; }
 
       [Required]
-      public string Word { get; set; } = "";
+      [MaxLength(5)]
+      public string Word { get; set; } = string.Empty;
       
       [Required]
       public GameState State { get; set; } = GameState.InProgress;
+      
+      [MaxLength(5)]
       public string? Guess1 { get; set; }
+      
+      [MaxLength(5)]
       public string? Guess2 { get; set; }
+      
+      [MaxLength(5)]
       public string? Guess3 { get; set; }
+      
+      [MaxLength(5)]
       public string? Guess4 { get; set; }
+      
+      [MaxLength(5)]
       public string? Guess5 { get; set; }
+      
+      [MaxLength(5)]
       public string? Guess6 { get; set; }
-
 }

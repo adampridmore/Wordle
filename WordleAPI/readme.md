@@ -1,6 +1,5 @@
 ## TODO
 
-Nullable / Non-nullable fields in database models
 Implement get game method
 Swagger
 SQL Server
