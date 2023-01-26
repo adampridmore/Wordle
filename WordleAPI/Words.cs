@@ -5,7 +5,7 @@ public class Words
 
   public Words()
   {
-    words = File.ReadAllLines("C:/Personal/wordle/WordleAPI/words.txt")
+    words = File.ReadAllLines("wwwroot/words.txt")
                 .Select(word => word.ToUpper())
                 .ToHashSet();
   }
