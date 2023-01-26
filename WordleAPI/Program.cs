@@ -17,7 +17,7 @@ app.MapTeamEndpoints();
 app.MapGameEndpoints();
 app.MapGuessEndpoints();
 
-app.MapGet("/", () => "WordleAPI!");
+app.MapGet("/", () => Results.Redirect("/Swagger")).ExcludeFromDescription();
 
 app.Run();
 
