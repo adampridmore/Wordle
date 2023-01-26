@@ -4,8 +4,25 @@ public static class GameEndpoints
 {
   public static IEndpointRouteBuilder MapGameEndpoints(this IEndpointRouteBuilder endpoints)
   {
-    endpoints.MapPost("/game", CreateNewGame);
-    endpoints.MapGet("/game/{gameId}", GetGame);
+    endpoints.MapPost("/game", CreateNewGame)
+             .WithName("NewGame")
+             .WithOpenApi(operation => new(operation)
+             {
+               Summary = "Starts a new game.",
+               Description = "Please register your team to obtain a TeamId first"
+             })
+             .Produces<NewGameResponse>();
+
+
+    endpoints.MapGet("/game/{gameId}", GetGame)
+             .WithName("GetGame")
+             .WithOpenApi(operation => new(operation)
+             {
+               Summary = "Retrives the details of your game.",
+               Description = "Includes previous guesses and their scores."
+             })
+             .Produces<GetGameResponse>();
+
     return endpoints;
   }
 

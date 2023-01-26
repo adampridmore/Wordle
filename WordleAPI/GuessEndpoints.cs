@@ -4,7 +4,19 @@ public static class GuessEndpoints
 {
   public static IEndpointRouteBuilder MapGuessEndpoints(this IEndpointRouteBuilder endpoints)
   {
-    endpoints.MapPost("/guess", async (NewGuess guessDetails, WordleDb db, Scorer scorer, Words words) =>
+    endpoints.MapPost("/guess", MakeGuess)
+             .WithName("MakeGuess")
+             .WithOpenApi(operation => new(operation)
+             {
+               Summary = "Make a guess at the word.",
+               Description = "The game must be created first."
+             })
+             .Produces<NewGuessResponse>();
+
+    return endpoints;
+  }
+
+  public static async Task<IResult> MakeGuess (NewGuess guessDetails, WordleDb db, Scorer scorer, Words words)
     {
       var game = await db.Games.Where(t => t.Id == guessDetails.GameId)
                              .FirstOrDefaultAsync();
@@ -88,10 +100,6 @@ public static class GuessEndpoints
         Score = score,
         State = game.State
       });
-    });
-
-    return endpoints;
-  }
-
+    }
 
 }
