@@ -3,11 +3,16 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<WordleDb>(opt => opt.UseInMemoryDatabase("WordleServer"));
+// builder.Services.AddDbContext<WordleDb>(opt => opt.UseInMemoryDatabase("WordleServer"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddSingleton(typeof(Words));
 builder.Services.AddSingleton(typeof(Scorer));
 builder.Services.AddSingleton(typeof(ValidationTools));
+
+builder.Services.AddDbContext<WordleDb>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Azure"));
+});
 
 var app = builder.Build();
 app.UseSwagger();

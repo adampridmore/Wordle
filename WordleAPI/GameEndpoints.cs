@@ -17,7 +17,7 @@ public static class GameEndpoints
              .WithName("GetGame")
              .WithOpenApi(operation => new(operation)
              {
-               Summary = "Retrives the details of your game.",
+               Summary = "Retrieves the details of your game.",
                Description = "Includes previous guesses and their scores."
              });
 
