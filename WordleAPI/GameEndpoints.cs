@@ -14,9 +14,9 @@ public static class GameEndpoints
     var game = await db.Games.Where(t => t.Id == gameId)
                                 .FirstOrDefaultAsync();
 
-    if (game is null)
+    if (game is null || gameId == Guid.Empty)
     {
-      return Results.NotFound("The game does not exist");
+      return Results.NotFound("The game does not exist.");
     }
 
     var result = new GetGameResponse

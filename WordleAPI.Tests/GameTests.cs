@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Http;
 using WordleAPI.Tests.Helpers;
@@ -103,5 +102,14 @@ public class GameTests : BaseTest
 
   }
 
-  // Game does not exist
+  [Fact]
+  public async Task NotFoundIsReportedIfTheGameDoesNotExist()
+  {
+    var madeUpGameId = Guid.NewGuid();
+
+    var client = Client();
+    var response = await client.GetAsync($"/game/{madeUpGameId}");
+    await ThenNotFoundIsReturned(response, "The game does not exist.");
+  }
+
 }
