@@ -7,6 +7,7 @@ builder.Services.AddDbContext<WordleDb>(opt => opt.UseInMemoryDatabase("WordleSe
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddSingleton(typeof(Words));
 builder.Services.AddSingleton(typeof(Scorer));
+builder.Services.AddSingleton(typeof(ValidationTools));
 
 var app = builder.Build();
 app.UseSwagger();

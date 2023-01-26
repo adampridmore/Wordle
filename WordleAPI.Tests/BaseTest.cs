@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WordleAPI.Tests.Helpers;
 using Xunit;
@@ -106,13 +107,22 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     }
   }
 
-  protected static async Task ThenBadRequestIsReturned(HttpResponseMessage response, string expectedMessage)
+  protected static async Task ThenAValidationProblemIsReturned(HttpResponseMessage response,
+                                                               string expectedDetail)
   {
     Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-    var detail = await response.Content.ReadFromJsonAsync<string>();
-    Assert.Equal(expectedMessage, detail);
+    var detail = await response.Content.ReadFromJsonAsync<HttpValidationProblemDetails>();
+    Assert.Equal(expectedDetail, detail!.Detail);
   }
 
+  protected static async Task ThenAFieldValidationProblemIsReturned(HttpResponseMessage response,
+                                                                    string fieldName,
+                                                                    string expectedMessage)
+  {
+    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    var detail = await response.Content.ReadFromJsonAsync<HttpValidationProblemDetails>();
+    Assert.Equal(expectedMessage, detail!.Errors[fieldName][0]);
+  }
 
   protected static async Task ThenNotFoundIsReturned(HttpResponseMessage response, string expectedMessage)
   {

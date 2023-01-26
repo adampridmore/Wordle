@@ -17,7 +17,7 @@ public class GuessTests : BaseTest
 
     var response = await WhenAGuessIsMade(game, guess:"ABC");
 
-    await ThenBadRequestIsReturned(response, "Guesses must be 5 letters long");
+    await ThenAValidationProblemIsReturned(response, "Guesses must be 5 letters long");
   }
 
   [Fact]
@@ -27,7 +27,7 @@ public class GuessTests : BaseTest
 
     var response = await WhenAGuessIsMade(game, guess:"ABCDE");
 
-    await ThenBadRequestIsReturned(response, "Your guess is not a valid word");
+    await ThenAValidationProblemIsReturned(response, "Your guess is not a valid word");
   }
 
 
@@ -108,7 +108,7 @@ public class GuessTests : BaseTest
 
     var response = await WhenAGuessIsMade(game, guess:"APPLE");
 
-    await ThenBadRequestIsReturned(response, "You have already won this game.");
+    await ThenAValidationProblemIsReturned(response, "You have already won this game.");
   }
 
   [Fact]
@@ -129,7 +129,7 @@ public class GuessTests : BaseTest
 
     var response = await WhenAGuessIsMade(game, ANY_WRONG_GUESS);
 
-    await ThenBadRequestIsReturned(response, "You have already lost this game.");
+    await ThenAValidationProblemIsReturned(response, "You have already lost this game.");
   }
 
   [Fact]
@@ -143,7 +143,7 @@ public class GuessTests : BaseTest
 
     var response = await WhenAGuessIsMade(game, guess:"APPLE");
 
-    await ThenBadRequestIsReturned(response, "You have already guessed this word.");
+    await ThenAValidationProblemIsReturned(response, "You have already guessed this word.");
   }
 
   [Fact]

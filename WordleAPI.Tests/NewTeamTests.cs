@@ -65,7 +65,7 @@ public class NewTeamTests : BaseTest
   {
     var response = await WhenTheTeamIsCreated(teamNameBeingTested);
 
-    await ThenBadRequestIsReturned(response, "The team name must be between 1 and 50 characters.");
+    await ThenAFieldValidationProblemIsReturned(response, "Name", "The team name must be between 1 and 50 characters.");
   }
 
   private async Task<HttpResponseMessage> WhenTheTeamIsCreated(string teamNameBeingTested)

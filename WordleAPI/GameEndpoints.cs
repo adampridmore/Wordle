@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 public static class GameEndpoints
@@ -10,9 +11,7 @@ public static class GameEndpoints
              {
                Summary = "Starts a new game.",
                Description = "Please register your team to obtain a TeamId first"
-             })
-             .Produces<NewGameResponse>();
-
+             });
 
     endpoints.MapGet("/game/{gameId}", GetGame)
              .WithName("GetGame")
@@ -20,20 +19,19 @@ public static class GameEndpoints
              {
                Summary = "Retrives the details of your game.",
                Description = "Includes previous guesses and their scores."
-             })
-             .Produces<GetGameResponse>();
+             });
 
     return endpoints;
   }
 
-  async static Task<IResult> GetGame(WordleDb db, Guid gameId, Scorer scorer)
+  async static Task<Results<Ok<GetGameResponse>, NotFound<string>>> GetGame(WordleDb db, Guid gameId, Scorer scorer)
   {
     var game = await db.Games.Where(t => t.Id == gameId)
                                 .FirstOrDefaultAsync();
 
     if (game is null || gameId == Guid.Empty)
     {
-      return Results.NotFound("The game does not exist.");
+      return TypedResults.NotFound("The game does not exist.");
     }
 
     var result = new GetGameResponse
@@ -52,7 +50,7 @@ public static class GameEndpoints
     AddGuess(scorer, game.Guess6, game.Word, guesses);
     result.Guesses = guesses.ToArray();
 
-    return Results.Ok(result);
+    return TypedResults.Ok(result);
 
     static void AddGuess(Scorer scorer, string? guess, string actualWord, List<GetGameResponse.GetGameScoreResponse> guesses)
     {
@@ -67,13 +65,15 @@ public static class GameEndpoints
     }
   }
 
-  async static Task<IResult> CreateNewGame(NewGame gameDetails, WordleDb db, Words words)
+  async static Task<Results<Ok<NewGameResponse>, NotFound<string>>> CreateNewGame(NewGame gameDetails,
+                                                                                  WordleDb db,
+                                                                                  Words words)
   {
     var team = await db.Teams.Where(t => t.Id == gameDetails.TeamId)
                              .FirstOrDefaultAsync();
     if (team is null || gameDetails.TeamId == Guid.Empty)
     {
-      return Results.NotFound("Team does not exist. Please call Team first.");
+      return TypedResults.NotFound("Team does not exist. Please call Team first.");
     }
 
     var game = new Game()
@@ -92,6 +92,6 @@ public static class GameEndpoints
       GameId = game.Id
     };
 
-    return Results.Ok(result);
+    return TypedResults.Ok(result);
   }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 public static class TeamEndpoints
@@ -10,17 +11,18 @@ public static class TeamEndpoints
       {
         Summary = "Register your team with the server.",
         Description = "The name of the team must be unique.  If the team already exists then the existing ID will be returned."
-      })
-      .Produces<NewTeamResponse>();
+      });
 
     return endpoints;
   }
 
-  public static async Task<IResult> RegisterTeam(NewTeam teamDetails, WordleDb db)
+  public static async Task<Results<Ok<NewTeamResponse>, ValidationProblem>> RegisterTeam(NewTeam teamDetails,
+                                                                                         WordleDb db,
+                                                                                         ValidationTools validationTools)
   {
     if (teamDetails.Name is null || teamDetails.Name.Length < 1 || teamDetails.Name.Length > 50)
     {
-      return Results.BadRequest("The team name must be between 1 and 50 characters.");
+      return validationTools.FieldValidationProblem(nameof(NewTeam.Name), "The team name must be between 1 and 50 characters.");
     }
 
     var team = await db.Teams.Where(t => t.Name == teamDetails.Name)
@@ -43,6 +45,8 @@ public static class TeamEndpoints
       Name = teamDetails.Name
     };
 
-    return Results.Ok(result);
+    return TypedResults.Ok(result);
   }
+
+
 }
