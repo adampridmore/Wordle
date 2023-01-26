@@ -6,16 +6,15 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet ef migrations add InitialCreate             
 dotnet ef migrations script --output InitialCreate.sql
 
+https://yorkcodedojowordleapi.azurewebsites.net/words.txt
 
 ## TODO
+
+Get method should'nt only include the word unless the game is complete
 
 Add date created to Game
 Add API to list games
 
-Add tables to SQL Server
-Connect app to sql server
-
-Remove hardcoded file path to words
 Example solution
 
 Admin methods for me

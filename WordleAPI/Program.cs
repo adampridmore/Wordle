@@ -17,6 +17,7 @@ builder.Services.AddDbContext<WordleDb>(options =>
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseStaticFiles();
 
 app.MapTeamEndpoints();
 app.MapGameEndpoints();
