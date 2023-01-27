@@ -61,6 +61,7 @@ public class GameTests : BaseTest
   [Fact]
   public async Task AGameCanBeRetrieved()
   {
+    var currentDate = DateTime.Now;
     var game = await GivenAGame(word: "ABCDE",
                                 with =>
                                 {
@@ -71,6 +72,7 @@ public class GameTests : BaseTest
                                   with.Guess5 = "EEEEE";
                                   with.Guess6 = "FFFFF";
                                   with.State = GameState.Lost;
+                                  with.DateStarted = currentDate;
                                 });
 
     var client = Client();
@@ -81,6 +83,7 @@ public class GameTests : BaseTest
     Assert.Equal(game.Id, actualGame.GameId);
     Assert.Equal("ABCDE", actualGame.Word);
     Assert.Equal(GameState.Lost, actualGame.State);
+    Assert.Equal(currentDate, actualGame.DateStarted);
 
     Assert.Equal("AAAAA", actualGame.Guesses[0].Guess);
     Assert.Equal("GYYYY", actualGame.Guesses[0].Score);

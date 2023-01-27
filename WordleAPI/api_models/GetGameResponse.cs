@@ -8,6 +8,7 @@ public class GetGameResponse
   
   public Guid GameId { get; set; }
   public string Word { get; set; } = string.Empty;
+  public DateTime DateStarted { get; set; }
   public GameState State { get; init; }
   public GetGameScoreResponse[] Guesses { get; set; } = new GetGameScoreResponse[] { };
 }

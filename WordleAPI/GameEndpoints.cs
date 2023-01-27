@@ -38,7 +38,8 @@ public static class GameEndpoints
     {
       GameId = game.Id,
       Word = string.Empty,
-      State = game.State
+      State = game.State,
+      DateStarted = game.DateStarted
     };
 
     if (game.State != GameState.InProgress) {
