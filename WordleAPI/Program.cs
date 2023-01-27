@@ -5,7 +5,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // builder.Services.AddDbContext<WordleDb>(opt => opt.UseInMemoryDatabase("WordleServer"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddSingleton(typeof(Words));
+
+builder.Services.AddSingleton(new Words(builder.Environment.WebRootPath));
 builder.Services.AddSingleton(typeof(Scorer));
 builder.Services.AddSingleton(typeof(ValidationTools));
 

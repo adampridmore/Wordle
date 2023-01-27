@@ -3,9 +3,10 @@ public class Words
   private HashSet<string> words;
   private Random random = new Random();
 
-  public Words()
+  public Words(string wwwroot)
   {
-    words = File.ReadAllLines("wwwroot/words.txt")
+    var fullPath = Path.Combine(wwwroot,"words.txt");
+    words = File.ReadAllLines(fullPath)
                 .Select(word => word.ToUpper())
                 .ToHashSet();
   }

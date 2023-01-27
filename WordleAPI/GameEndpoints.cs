@@ -37,9 +37,13 @@ public static class GameEndpoints
     var result = new GetGameResponse
     {
       GameId = game.Id,
-      Word = game.Word,
+      Word = string.Empty,
       State = game.State
     };
+
+    if (game.State != GameState.InProgress) {
+      result.Word = game.Word;
+    }
 
     var guesses = new List<GetGameResponse.GetGameScoreResponse>();
     AddGuess(scorer, game.Guess1, game.Word, guesses);

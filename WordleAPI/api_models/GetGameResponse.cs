@@ -7,7 +7,7 @@ public class GetGameResponse
   }
   
   public Guid GameId { get; set; }
-  public string Word { get; set; } = "";  // Only populated when state!=inprogress
-  public GameState State { get; set; } = GameState.InProgress;
+  public string Word { get; set; } = string.Empty;
+  public GameState State { get; init; }
   public GetGameScoreResponse[] Guesses { get; set; } = new GetGameScoreResponse[] { };
 }

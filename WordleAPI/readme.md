@@ -10,10 +10,8 @@ https://yorkcodedojowordleapi.azurewebsites.net/words.txt
 
 ## TODO
 
-Get method should'nt only include the word unless the game is complete
-
 Add date created to Game
-Add API to list games
+Add API to list games in date order
 
 Example solution
 

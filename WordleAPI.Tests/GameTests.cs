@@ -112,4 +112,23 @@ public class GameTests : BaseTest
     await ThenNotFoundIsReturned(response, "The game does not exist.");
   }
 
+  [Theory]
+  [InlineData(GameState.InProgress, "")]
+  [InlineData(GameState.Lost, "ABCDE")]
+  [InlineData(GameState.Won, "ABCDE")]
+  public async Task TheWordIsOnlyAvailableWhenTheGameIsComplete(GameState gameState, string expectedWord)
+  {
+    var game = await GivenAGame(word: "ABCDE",
+                                with =>
+                                {
+                                  with.Guess1 = "AAAAA";
+                                  with.State = gameState;
+                                });
+
+    var client = Client();
+
+    var actualGame = await client.GetFromJsonAsync<GetGameResponse>($"/game/{game.Id}");
+    Assert.NotNull(actualGame);
+    Assert.Equal(expectedWord, actualGame.Word);
+  }
 }
