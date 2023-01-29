@@ -10,9 +10,10 @@ dotnet ef migrations script InitialCreate  --output DateStarted.sql
 https://yorkcodedojowordleapi.azurewebsites.net/words.txt
 
 ## TODO
+Deploy DateStarted.sql
+Deploy Latest code
+Tidy up Tests
 
-Add date created to Game
-Add API to list games in date order
 
 Example solution
 

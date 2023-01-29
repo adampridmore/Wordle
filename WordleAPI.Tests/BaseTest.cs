@@ -56,21 +56,25 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
   }
 
   protected async Task<Game> GivenAGame(string word,
-                                        Action<Game>? builder = null)
+                                        Action<Game>? builder = null,
+                                        Team? team = null)
   {
     return await Given(context =>
     {
-      var team = new Team
+      if (team is null)
       {
-        Id = Guid.NewGuid(),
-        Name = "Team title"
-      };
-      context.Teams.Add(team);
+        team = new Team
+        {
+          Id = Guid.NewGuid(),
+          Name = "Team title"
+        };
+        context.Teams.Add(team);
+      }
 
       var game = new Game
       {
         Id = Guid.NewGuid(),
-        Team = team,
+        TeamId = team.Id,
         Word = word
       };
 
@@ -78,7 +82,7 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
       {
         builder(game);
       }
-      
+
       context.Games.Add(game);
       return game;
     });

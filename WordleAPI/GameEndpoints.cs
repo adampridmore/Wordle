@@ -21,8 +21,41 @@ public static class GameEndpoints
                Description = "Includes previous guesses and their scores."
              });
 
+    endpoints.MapGet("/team/{teamId}/games", GetGames)
+             .WithName("GetGames")
+             .WithOpenApi(operation => new(operation)
+             {
+               Summary = "Retrieves the details of all your games.",
+               Description = ""
+             });
+
     return endpoints;
   }
+
+
+  async static Task<Results<Ok<GetGamesResponse[]>, NotFound<string>>> GetGames(WordleDb db, Guid teamId)
+  {
+    var team = await db.Teams.Where(t => t.Id == teamId)
+                            .FirstOrDefaultAsync();
+
+    if (team is null || teamId == Guid.Empty)
+    {
+      return TypedResults.NotFound("The team does not exist.");
+    }
+
+    var games = await db.Games.Where(t => t.TeamId == teamId)
+                              .Select(t => new GetGamesResponse{
+                                GameId = t.Id,
+                                DateStarted = t.DateStarted,
+                                State = t.State
+                              })
+                              .OrderBy(t => t.DateStarted)
+                              .ToArrayAsync();
+
+    return TypedResults.Ok(games);
+  }
+
+
 
   async static Task<Results<Ok<GetGameResponse>, NotFound<string>>> GetGame(WordleDb db, Guid gameId, Scorer scorer)
   {
@@ -42,7 +75,8 @@ public static class GameEndpoints
       DateStarted = game.DateStarted
     };
 
-    if (game.State != GameState.InProgress) {
+    if (game.State != GameState.InProgress)
+    {
       result.Word = game.Word;
     }
 

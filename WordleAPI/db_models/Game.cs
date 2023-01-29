@@ -14,6 +14,9 @@ public class Game
 
   [Required]
   public Team? Team { get; set; }
+  
+  [Required]
+  public Guid TeamId { get; set; }
 
   [Required]
   public DateTime DateStarted { get; set; }
