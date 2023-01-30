@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using WordleAPI.Tests.Helpers;
 using Xunit;
 
@@ -12,8 +11,7 @@ public class ListGameTests : BaseTest
   public async Task TheTeamMustBeRegisteredBeforeAGameCanBeCreated()
   {
     var INVALID_TEAM_ID = Guid.NewGuid();
-    var client = Client();
-    var response = await client.GetAsync($"/team/{INVALID_TEAM_ID}/games");
+    var response = await WhenTheGetRequestIsMade($"/team/{INVALID_TEAM_ID}/games");
     await ThenNotFoundIsReturned(response, "The team does not exist.");
   }
 
@@ -22,9 +20,9 @@ public class ListGameTests : BaseTest
   {
     var yesterday = DateTime.Now.AddDays(-1);
     var today = DateTime.Now;
-    
+
     // Given a team with 2 games
-    var team  = await GivenATeam();
+    var team = await GivenATeam();
     var expectedGame1 = await GivenAGame(word: "ABCDE",
                                 with =>
                                 {
@@ -38,12 +36,10 @@ public class ListGameTests : BaseTest
                                   with.DateStarted = today;
                                 }, team);
 
-    // Given another team with a games
+    // Given another team with a game
     var otherGame = await GivenAGame(word: "ABCDE");
 
-    var client = Client();
-
-    var actualGames = await client.GetFromJsonAsync<GetGamesResponse[]>($"/team/{team.Id}/games");
+    var actualGames = await WhenTheGamesForATeamAreRequested(team);
     Assert.Equal(2, actualGames!.Count());
 
     var actualGame1 = actualGames![0];
@@ -55,6 +51,5 @@ public class ListGameTests : BaseTest
     Assert.Equal(expectedGame2.DateStarted, actualGame2.DateStarted);
     Assert.Equal(expectedGame2.Id, actualGame2.GameId);
     Assert.Equal(expectedGame2.State, actualGame2.State);
-
   }
 }

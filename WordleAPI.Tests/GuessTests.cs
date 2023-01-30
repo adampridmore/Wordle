@@ -182,15 +182,4 @@ public class GuessTests : BaseTest
       Assert.Equal(GameState.InProgress, actualGame.State);
     });
   }
-
-  private async Task<HttpResponseMessage> WhenAGuessIsMade(Game game, string guess)
-  {
-    var client = Client();
-    var response = await client.PostAsJsonAsync("/guess", new NewGuess
-    {
-      GameId = game.Id,
-      Guess = guess
-    });
-    return response;
-  }
 }

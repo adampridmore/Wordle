@@ -102,6 +102,53 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
     });
   }
 
+  protected async Task<HttpResponseMessage> WhenANewGameIsCreated(Guid teamId)
+  {
+    var client = Client();
+    var response = await client.PostAsJsonAsync("/game", new NewGame
+    {
+      TeamId = teamId
+    });
+    return response;
+  }
+
+  protected async Task<HttpResponseMessage> WhenTheGetRequestIsMade(string url)
+  {
+    var client = Client();
+    return await client.GetAsync(url);
+  }
+
+  protected async Task<HttpResponseMessage> WhenAGuessIsMade(Game game, string guess)
+  {
+    var client = Client();
+    return await client.PostAsJsonAsync("/guess", new NewGuess
+    {
+      GameId = game.Id,
+      Guess = guess
+    });
+  }
+
+  protected async Task<GetGameResponse?> WhenTheGameIsRetrieved(Game game)
+  {
+    var client = Client();
+    return await client.GetFromJsonAsync<GetGameResponse>($"/game/{game.Id}");
+  }
+
+  protected async Task<GetGamesResponse[]?> WhenTheGamesForATeamAreRequested(Team team)
+  {
+    var client = Client();
+    return await client.GetFromJsonAsync<GetGamesResponse[]>($"/team/{team.Id}/games");
+  }
+
+  protected async Task<HttpResponseMessage> WhenTheTeamIsCreated(string teamNameBeingTested)
+  {
+    var client = Client();
+    return await client.PostAsJsonAsync("/team", new NewTeam
+    {
+      Name = teamNameBeingTested
+    });
+  }
+
   protected static async Task ThenOKIsReturned(HttpResponseMessage response)
   {
     if (response.StatusCode != HttpStatusCode.OK)

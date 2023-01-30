@@ -12,8 +12,6 @@ https://yorkcodedojowordleapi.azurewebsites.net/words.txt
 ## TODO
 Deploy DateStarted.sql
 Deploy Latest code
-Tidy up Tests
-
 
 Example solution
 

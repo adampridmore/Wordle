@@ -34,27 +34,17 @@ public class NewTeamTests : BaseTest
   [Fact]
   public async Task ReRegisterExistingTeam()
   {
-    var teamId = Guid.NewGuid();
-    const string validTeamName = "Test Title";
-    await Given(context =>
-    {
-      var team = new Team
-      {
-        Id = teamId,
-        Name = validTeamName
-      };
-      context.Teams.Add(team);
-      return team;
-    });
+    var existingTeam = await GivenATeam();
 
-    var response = await WhenTheTeamIsCreated(validTeamName);
+    // When a team is created with the same name
+    var response = await WhenTheTeamIsCreated(existingTeam.Name);
 
     await ThenOKIsReturned(response);
 
     var detail = await response.Content.ReadFromJsonAsync<NewTeamResponse>();
     Assert.NotNull(detail);
-    Assert.Equal(validTeamName, detail.Name);
-    Assert.Equal(teamId, detail.Id);
+    Assert.Equal(existingTeam.Name, detail.Name);
+    Assert.Equal(existingTeam.Id, detail.Id);
   }
 
   [Theory]
@@ -66,15 +56,5 @@ public class NewTeamTests : BaseTest
     var response = await WhenTheTeamIsCreated(teamNameBeingTested);
 
     await ThenAFieldValidationProblemIsReturned(response, "Name", "The team name must be between 1 and 50 characters.");
-  }
-
-  private async Task<HttpResponseMessage> WhenTheTeamIsCreated(string teamNameBeingTested)
-  {
-    var client = Client();
-    var response = await client.PostAsJsonAsync("/team", new NewTeam
-    {
-      Name = teamNameBeingTested
-    });
-    return response;
   }
 }

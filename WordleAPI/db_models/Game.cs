@@ -13,7 +13,7 @@ public class Game
   public Guid Id { get; set; }
 
   [Required]
-  public Team? Team { get; set; }
+  public Team Team { get; init; } = null!;
   
   [Required]
   public Guid TeamId { get; set; }
