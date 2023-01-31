@@ -25,7 +25,7 @@ public class NewTeamTests : BaseTest
     // Then the team is added to the database.
     Then(context => {
       var createdTeam = context.Teams.First();
-      Assert.Equal(createdTeam.Name, validTeamName);
+      Assert.Equal(validTeamName, createdTeam.Name);
       Assert.Equal(validTeamName, detail.Name);
       Assert.Equal(createdTeam.Id, detail.Id);
     });

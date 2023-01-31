@@ -30,7 +30,7 @@ public class GameTests : BaseTest
       var createdGame = context.Games.Include(game => game.Team).First();
       Assert.Equal(createdGame.Team!.Id, team.Id);
       Assert.Equal(createdGame.Id, detail.GameId);
-      Assert.Equal(createdGame.State, GameState.InProgress);
+      Assert.Equal(GameState.InProgress, createdGame.State);
       Assert.NotNull(createdGame.Word);
       Assert.Null(createdGame.Guess1);
       Assert.Null(createdGame.Guess2);

@@ -1,2 +1,8 @@
-bin/
+/WordleAPI/bin/Publish/
+
 obj/
+/bin/
+
+/WordleAPI/bin/Debug/
+/WordleAPI/bin/Release/
+/WordleAPI.Tests/bin/
