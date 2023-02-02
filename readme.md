@@ -25,3 +25,11 @@ Example solution
 Admin methods for me
   List of teams
   Dashboard?
+
+Rename end points
+
+POST -> /team creates a new team
+POST -> /team/{teamId}/game creates a new game
+GET ->  /team/{teamId}/game retrieves all your games
+GET ->  /team/{teamId}/game/{gameId} retrieves the specified game
+POST ->  /team/{teamId}/game/{gameId}/guess makes a guess for the specified game

@@ -7,8 +7,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddSingleton(new Words(builder.Environment.WebRootPath));
-builder.Services.AddSingleton(typeof(Scorer));
-builder.Services.AddSingleton(typeof(ValidationTools));
+builder.Services.AddSingleton<Scorer>();
+builder.Services.AddSingleton<ValidationTools>();
 
 builder.Services.AddDbContext<WordleDb>(options =>
 {

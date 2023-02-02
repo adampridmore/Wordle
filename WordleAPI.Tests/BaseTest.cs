@@ -40,9 +40,9 @@ public abstract class BaseTest : IClassFixture<TestWebApplicationFactory<Program
   {
     using (var scope = _factory.Services.CreateScope())
     {
-      var db = scope.ServiceProvider.GetService<WordleDb>();
-      var result = builder(db!);
-      await db!.SaveChangesAsync();
+      var db = scope.ServiceProvider.GetRequiredService<WordleDb>();
+      var result = builder(db);
+      await db.SaveChangesAsync();
       return result;
     }
   }
