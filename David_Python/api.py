@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import datetime
+from dataclasses import dataclass
 from enum import Enum
 from typing import Final, List, NewType
 from uuid import UUID
@@ -79,9 +79,11 @@ def guess_word(game_id: GameId, guess: str) -> NewGuessResponse:
 
 def get_game(game_id: GameId) -> GetGameResponse:
     response = requests.get(f"{BASE_URL}/game/{game_id}")
+    response.raise_for_status()
     return response.json()
 
 
 def get_all_games(team_id: TeamId) -> GetGamesResponse:
     response = requests.get(f"{BASE_URL}/team/{team_id}/games")
+    response.raise_for_status()
     return response.json()
