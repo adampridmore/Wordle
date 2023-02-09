@@ -6,3 +6,6 @@ obj/
 /WordleAPI/bin/Debug/
 /WordleAPI/bin/Release/
 /WordleAPI.Tests/bin/
+
+/David_CSharp/bin/
+/David_Python/__pycache__/

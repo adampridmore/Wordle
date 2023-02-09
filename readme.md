@@ -6,7 +6,7 @@ https://yorkcodedojowordleapi.azurewebsites.net/words.txt
 cd .\WordleAPI\
 dotnet publish -c Release -o ./bin/Publish
 Right click on publish and deploy to web app  (Note. the bin folder might be hidden in .gitignore)
-
+If you see the error `Cannot read properties of undefined (reading 'createClient')` then opening the Azure extension and expanding YorkDevelopers/App Services seems to resolve it.
 
 ## To create database changes
 dotnet tool install --global dotnet-ef 
