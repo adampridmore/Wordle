@@ -120,7 +120,8 @@ public static class GameEndpoints
       Id = Guid.NewGuid(),
       Team = team,
       State = GameState.InProgress,
-      Word = words.RandomWord()
+      Word = words.RandomWord(),
+      DateStarted = DateTime.Now
     };
 
     db.Games.Add(game);
