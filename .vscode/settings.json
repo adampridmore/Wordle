@@ -1,4 +1,8 @@
 {
+  "python.languageServer": "Pylance",
+  "python.linting.pycodestyleEnabled": true,
+  "python.analysis.typeCheckingMode": "strict",
+
   "appService.defaultWebAppToDeploy": "/subscriptions/4730fd9e-02cf-4f1e-8f93-cca36d1c7608/AppServices/subscriptions/4730fd9e-02cf-4f1e-8f93-cca36d1c7608/resourceGroups/Wordle/providers/Microsoft.Web/sites/YorkCodeDojoWordleAPI",
   "appService.deploySubpath": "WordleAPI\\bin\\Publish"
 }
