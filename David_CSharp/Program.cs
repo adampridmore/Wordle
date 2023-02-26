@@ -6,6 +6,9 @@
   {
     try
     {
+      await api.DownloadWords("words.txt");
+      Console.WriteLine("Downloaded word list");
+
       var teamId = await api.RegisterTeam("Davids Example");
       Console.Write(teamId);
       

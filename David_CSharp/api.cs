@@ -40,6 +40,19 @@ public class API
   }
 
 
+  public async Task DownloadWords(string path)
+  {
+    var url = $"{baseURL}/words.txt";
+    var response = await client.GetAsync(url);
+    response.EnsureSuccessStatusCode();
+    var stream = await response.Content.ReadAsStreamAsync();
+    var fileInfo = new FileInfo(path);
+    using (var fileStream = fileInfo.OpenWrite())
+    {
+      await stream.CopyToAsync(fileStream);
+    }
+  }
+
   public async Task<GetGameResponse> GetGame(Guid gameId)
   {
     var url = $"{baseURL}/game/{gameId}";
