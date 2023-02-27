@@ -22,19 +22,22 @@
 
       // Pick a word at random
       var rnd = new Random();
-      while (true)
+      var game = await api.GetGame(gameId);
+      
+      while (game.State == GameState.InProgress)
       {
         var wordToTry = words[rnd.NextInt64(words.LongCount())];
 
         var guess = await api.GuessWord(gameId, wordToTry);
+        Console.WriteLine(wordToTry);
         Console.WriteLine(guess.Score);
         Console.WriteLine(guess.State.ToString());
 
         words = filterUsingScore(words, wordToTry, guess.Score);
-      }
 
-      var game = await api.GetGame(gameId);
-      Console.WriteLine(game.State.ToString());
+        game = await api.GetGame(gameId);
+        Console.WriteLine(game.State.ToString());
+      }
     }
     catch (Exception e)
     {
