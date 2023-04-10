@@ -1,3 +1,5 @@
+namespace David_CSharp.Models;
+
 public class GetGameResponse
 {
   public class GetGameScoreResponse
@@ -10,5 +12,5 @@ public class GetGameResponse
   public string Word { get; set; } = string.Empty;
   public DateTime DateStarted { get; set; }
   public GameState State { get; init; }
-  public GetGameScoreResponse[] Guesses { get; set; } = new GetGameScoreResponse[] { };
+  public GetGameScoreResponse[] Guesses { get; set; } = Array.Empty<GetGameScoreResponse>();
 }

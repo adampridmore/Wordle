@@ -1,6 +1,10 @@
-﻿public static class Program
+﻿using David_CSharp.Models;
+
+namespace David_CSharp;
+
+public static class Program
 {
-  static readonly API api = new API();
+  static readonly Api Api = new Api();
 
   static async Task Main()
   {
@@ -8,34 +12,34 @@
     {
       if (!File.Exists("words.txt"))
       {
-        await api.DownloadWords("words.txt");
+        await Api.DownloadWords("words.txt");
         Console.WriteLine("Downloaded word list");
       }
 
       var words = await File.ReadAllLinesAsync("words.txt");
 
-      var teamId = await api.RegisterTeam("Davids Example");
+      var teamId = await Api.RegisterTeam("Davids Example");
       Console.Write(teamId);
 
-      var gameId = await api.StartNewGame(teamId);
+      var gameId = await Api.StartNewGame(teamId);
       Console.Write(gameId);
 
       // Pick a word at random
       var rnd = new Random();
-      var game = await api.GetGame(gameId);
+      var game = await Api.GetGame(gameId);
       
       while (game.State == GameState.InProgress)
       {
         var wordToTry = words[rnd.NextInt64(words.LongCount())];
 
-        var guess = await api.GuessWord(gameId, wordToTry);
+        var guess = await Api.GuessWord(gameId, wordToTry);
         Console.WriteLine(wordToTry);
         Console.WriteLine(guess.Score);
         Console.WriteLine(guess.State.ToString());
 
-        words = filterUsingScore(words, wordToTry, guess.Score);
+        words = FilterUsingScore(words, wordToTry, guess.Score);
 
-        game = await api.GetGame(gameId);
+        game = await Api.GetGame(gameId);
         Console.WriteLine(game.State.ToString());
       }
     }
@@ -46,7 +50,7 @@
     }
   }
 
-  private static string[] filterUsingScore(string[] words, string guess, string score)
+  private static string[] FilterUsingScore(string[] words, string guess, string score)
   {
     return words.Where(word => IsValid(word, guess, score)).ToArray();
   }

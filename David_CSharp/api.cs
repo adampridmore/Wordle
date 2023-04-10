@@ -1,9 +1,12 @@
 using System.Net.Http.Json;
+using David_CSharp.Models;
 
-public class API
+namespace David_CSharp;
+
+public class Api
 {
-  const string baseURL = "https://yorkcodedojowordleapi.azurewebsites.net";
-  static readonly HttpClient client = new HttpClient();
+  const string BaseUrl = "https://yorkcodedojowordleapi.azurewebsites.net";
+  static readonly HttpClient Client = new HttpClient();
 
   public async Task<Guid> RegisterTeam(string teamName)
   {
@@ -42,12 +45,13 @@ public class API
 
   public async Task DownloadWords(string path)
   {
-    var url = $"{baseURL}/words.txt";
-    var response = await client.GetAsync(url);
+    const string url = $"{BaseUrl}/words.txt";
+    var response = await Client.GetAsync(url);
     response.EnsureSuccessStatusCode();
     var stream = await response.Content.ReadAsStreamAsync();
     var fileInfo = new FileInfo(path);
-    using (var fileStream = fileInfo.OpenWrite())
+    var fileStream = fileInfo.OpenWrite();
+    await using (fileStream.ConfigureAwait(false))
     {
       await stream.CopyToAsync(fileStream);
     }
@@ -55,8 +59,8 @@ public class API
 
   public async Task<GetGameResponse> GetGame(Guid gameId)
   {
-    var url = $"{baseURL}/game/{gameId}";
-    var result = await client.GetFromJsonAsync<GetGameResponse>(url);
+    var url = $"{BaseUrl}/game/{gameId}";
+    var result = await Client.GetFromJsonAsync<GetGameResponse>(url);
     if (result is null)
       throw new Exception($"No result returned by GET call to game");
     return result;
@@ -64,8 +68,8 @@ public class API
 
   private async Task<TResponse> Post<TResponse>(string endpoint, object payload)
   {
-    var url = $"{baseURL}/{endpoint}";
-    var httpResponse = await client.PostAsJsonAsync(url, payload);
+    var url = $"{BaseUrl}/{endpoint}";
+    var httpResponse = await Client.PostAsJsonAsync(url, payload);
 
     if (!httpResponse.IsSuccessStatusCode)
     {

@@ -1,3 +1,5 @@
+using David_CSharp.Models;
+
 public class NewGuessResponse
 {
     public string Score { get; set; } = "";
