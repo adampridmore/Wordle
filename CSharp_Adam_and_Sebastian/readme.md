@@ -6,3 +6,6 @@
     "name": "SeeSharpers"
 }
 ```
+
+Open API Specification
+https://yorkcodedojowordleapi.azurewebsites.net/Swagger/index.html
