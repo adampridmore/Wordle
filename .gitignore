@@ -1,7 +1,7 @@
 /WordleAPI/bin/Publish/
 
 obj/
-/bin/
+bin/
 
 /WordleAPI/bin/Debug/
 /WordleAPI/bin/Release/
