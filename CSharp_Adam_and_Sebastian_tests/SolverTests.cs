@@ -22,6 +22,17 @@ public class Tests
     Assert.That(result, Is.EqualTo("GGGGG"));
   }
 
+  
+  [Test]
+  public void FullMatch_ignore_case()
+  {
+    var guess = "Words";
+    var actualWord = "WORDS";
+    var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
+
+    Assert.That(result, Is.EqualTo("GGGGG"));
+  }
+
   [Test]
   public void OneYellowMatch()
   {
@@ -43,7 +54,7 @@ public class Tests
 
   [Test]
   public void GetNextGuess(){
-    var solver = new Solver(File.ReadAllLines("words.txt").ToList());
+    var solver = new Solver();
 
     var nextGuess = solver.GetNextGuess("words", "G  GG");
 

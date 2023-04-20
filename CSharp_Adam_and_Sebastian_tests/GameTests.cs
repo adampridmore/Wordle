@@ -3,6 +3,16 @@ namespace CSharp_Adam_and_Sebastian_tests;
 public class GameTests
 {
   [Test]
+  public void new_game(){
+    var game = Game.NewGame("GREEN");
+
+    Assert.That(game.State, Is.EqualTo(GameState.InProgress));
+    Assert.That(game.LastGuessScore, Is.EqualTo(""));
+
+    Assert.That(game.GuessCount, Is.EqualTo(0));
+  }
+
+  [Test]
   public void new_game_with_one_winning_guess()
   {
     var game = Game.NewGame("GREEN");
@@ -26,5 +36,20 @@ public class GameTests
     Assert.That(nextGuessGame.LastGuessScore, Is.EqualTo("   GY"));
 
     Assert.That(nextGuessGame.GuessCount, Is.EqualTo(1));
+  }
+
+  [Test]
+  public void PlayGame(){
+    var game = Game.NewGame("green");
+    var guess = "first";
+ 
+    var solver = new Solver();
+    
+    while (game.State == GameState.InProgress){  
+      game = game.MakeGuess(guess);
+      guess = solver.GetNextGuess(guess, game.LastGuessScore);
+
+      System.Console.WriteLine($"Guess: {guess} Score:{game.LastGuessScore} State: {game.State}");
+    }
   }
 }

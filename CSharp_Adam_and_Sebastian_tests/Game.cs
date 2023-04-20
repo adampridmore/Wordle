@@ -19,7 +19,7 @@ public class Game {
   private readonly string _word;
 
   public static Game NewGame(string word){
-    return new Game(word, 0, "", GameState.Won);
+    return new Game(word, 0, "", GameState.InProgress);
   }
 
   private Game(string word, int guessCount, string lastGuessScore, GameState state){

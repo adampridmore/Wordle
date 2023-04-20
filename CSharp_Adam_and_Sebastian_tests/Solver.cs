@@ -8,6 +8,10 @@ public class Solver {
     _words = words;
   }
 
+  public Solver(){
+    _words = File.ReadAllLines("words.txt").ToList();
+  }
+
   public String GetNextGuess(String lastGuess, String lastResult) {
     var filteredWords = _words.Where(word => Solver.ScoreGuessAgainstWord(lastGuess, word) == lastResult);
 
@@ -15,11 +19,14 @@ public class Solver {
   }
 
   public static String ScoreGuessAgainstWord(string guess, string word) {
+    var guessLowerCase = guess.ToLowerInvariant();
+    var wordLowerCase = word.ToLowerInvariant();
+    
     var result = new char[5];
     for(int i = 0 ; i < 5 ; i++){
-      if (guess[i] == word[i]){
+      if (guessLowerCase[i] == wordLowerCase[i]){
         result[i] = 'G';
-      } else if (word.ToArray().Contains(guess[i])) {
+      } else if (wordLowerCase.ToArray().Contains(guessLowerCase[i])) {
         result[i] = 'Y';
       } else {
         result[i] = ' ';
