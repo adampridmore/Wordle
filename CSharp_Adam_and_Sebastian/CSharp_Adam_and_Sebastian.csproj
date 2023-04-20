@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <ProjectReference Include="../CSharp_Adam_and_Sebastian_tests/CSharp_Adam_and_Sebastian_tests.csproj" />
+    <Content Include="words.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
