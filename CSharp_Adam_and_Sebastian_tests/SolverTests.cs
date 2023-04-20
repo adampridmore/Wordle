@@ -9,7 +9,7 @@ public class Tests
     var actualWord = "ZZZZZ";
     var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
 
-    Assert.AreEqual("     ", result);
+    Assert.That(result, Is.EqualTo("     "));
   }
 
   [Test]
@@ -19,7 +19,7 @@ public class Tests
     var actualWord = "WORDS";
     var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
 
-    Assert.AreEqual("GGGGG", result);
+    Assert.That(result, Is.EqualTo("GGGGG"));
   }
 
   [Test]
@@ -29,7 +29,7 @@ public class Tests
     var actualWord = "BBBBA";
     var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
 
-    Assert.AreEqual("Y    ", result);
+    Assert.That(result, Is.EqualTo("Y    "));
   }
 
   [Test]
@@ -38,9 +38,8 @@ public class Tests
     var actualWord = "ABCDE";
     var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
 
-    Assert.AreEqual("GGY  ", result);
+    Assert.That(result, Is.EqualTo("GGY  "));
   }
-
 
   [Test]
   public void GetNextGuess(){
@@ -48,7 +47,7 @@ public class Tests
 
     var nextGuess = solver.GetNextGuess("words", "G  GG");
 
-    Assert.AreEqual("winds", nextGuess);
+    Assert.That(nextGuess, Is.EqualTo(("winds")));
   }
 
     // [Test]
