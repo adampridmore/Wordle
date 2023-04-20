@@ -2,20 +2,35 @@ using System.Collections;
 using System;
 
 public class WordGuesser {
-  private readonly List<String> _words;
+  
+  public List<String> Words {get;}
 
   public WordGuesser(List<String> words) {
-    _words = words;
+    Words = words;
   }
 
   public WordGuesser(){
-    _words = File.ReadAllLines("words.txt").ToList();
+    Words = File.ReadAllLines("words.txt").ToList();
   }
 
-  public String GetNextGuess(String lastGuess, String lastResult) {
-    var filteredWords = _words.Where(word => WordGuesser.ScoreGuessAgainstWord(lastGuess, word) == lastResult);
+  public String GetNextGuess(String lastGuessWord, String lastResultScore) {
+    var filteredWords = Words
+                          .Where(word => WordGuesser.ScoreGuessAgainstWord(lastGuessWord, word) == lastResultScore)
+                          .Where(word => word != lastGuessWord)
+                          ;
 
-    return filteredWords.First();
+
+    var nextGuess = filteredWords.FirstOrDefault();
+
+    if (nextGuess == lastGuessWord) {
+      throw new Exception($"Last guess [{lastGuessWord}] equals next guess [{nextGuess}]");
+    }
+
+    if (nextGuess == null){
+      throw new Exception($"No nextGuess for lastGuessWord: [{lastGuessWord}]");
+    }
+
+    return nextGuess;
   }
 
   public static String ScoreGuessAgainstWord(string guess, string word) {

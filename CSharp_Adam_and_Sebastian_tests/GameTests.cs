@@ -37,19 +37,4 @@ public class GameTests
 
     Assert.That(nextGuessGame.GuessCount, Is.EqualTo(1));
   }
-
-  [Test]
-  public void PlayGame(){
-    var game = Game.NewGame("green");
-    var guess = "first";
- 
-    var wordGuesser = new WordGuesser();
-    
-    while (game.State == GameState.InProgress){  
-      game = game.MakeGuess(guess);
-      guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore);
-
-      System.Console.WriteLine($"Guess: {guess} Score:{game.LastGuessScore} State: {game.State}");
-    }
-  }
 }

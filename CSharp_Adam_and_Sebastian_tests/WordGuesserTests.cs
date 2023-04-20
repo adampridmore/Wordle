@@ -61,6 +61,15 @@ public class WordGuesserTests
     Assert.That(nextGuess, Is.EqualTo(("winds")));
   }
 
+  [Test]
+  public void Dont_guess_same_word(){
+
+    var wordGuesser = new WordGuesser(new List<string>() {"AAAAC", "AAAAD"});
+    var nextGuess = wordGuesser.GetNextGuess("AAAAB","GGGG ");
+    System.Console.WriteLine(nextGuess);
+    Assert.That(nextGuess, Is.EqualTo("AAAAD"));
+  }
+
     // [Test]
     // public void FilterWordList() {
     //     var words = File.ReadAllLines("words.txt");
