@@ -1,19 +1,19 @@
 using System.Collections;
 using System;
 
-public class Solver {
+public class WordGuesser {
   private readonly List<String> _words;
 
-  public Solver(List<String> words) {
+  public WordGuesser(List<String> words) {
     _words = words;
   }
 
-  public Solver(){
+  public WordGuesser(){
     _words = File.ReadAllLines("words.txt").ToList();
   }
 
   public String GetNextGuess(String lastGuess, String lastResult) {
-    var filteredWords = _words.Where(word => Solver.ScoreGuessAgainstWord(lastGuess, word) == lastResult);
+    var filteredWords = _words.Where(word => WordGuesser.ScoreGuessAgainstWord(lastGuess, word) == lastResult);
 
     return filteredWords.First();
   }

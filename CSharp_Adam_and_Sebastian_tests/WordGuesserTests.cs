@@ -1,13 +1,13 @@
 namespace CSharp_Adam_and_Sebastian_tests;
 
-public class Tests
+public class WordGuesserTests
 {
   [Test]
   public void NoMatch()
   {
     var guess = "WORDS";
     var actualWord = "ZZZZZ";
-    var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
+    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
     Assert.That(result, Is.EqualTo("     "));
   }
@@ -17,7 +17,7 @@ public class Tests
   {
     var guess = "WORDS";
     var actualWord = "WORDS";
-    var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
+    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
     Assert.That(result, Is.EqualTo("GGGGG"));
   }
@@ -28,7 +28,7 @@ public class Tests
   {
     var guess = "Words";
     var actualWord = "WORDS";
-    var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
+    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
     Assert.That(result, Is.EqualTo("GGGGG"));
   }
@@ -38,7 +38,7 @@ public class Tests
   {
     var guess = "A     ";
     var actualWord = "BBBBA";
-    var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
+    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
     Assert.That(result, Is.EqualTo("Y    "));
   }
@@ -47,14 +47,14 @@ public class Tests
   public void MixMatches(){
     var guess = "ABBZZ";
     var actualWord = "ABCDE";
-    var result = Solver.ScoreGuessAgainstWord(guess, actualWord);
+    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
     Assert.That(result, Is.EqualTo("GGY  "));
   }
 
   [Test]
   public void GetNextGuess(){
-    var solver = new Solver();
+    var solver = new WordGuesser();
 
     var nextGuess = solver.GetNextGuess("words", "G  GG");
 

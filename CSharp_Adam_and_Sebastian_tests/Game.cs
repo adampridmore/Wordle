@@ -30,7 +30,7 @@ public class Game {
   }
 
   public Game MakeGuess(string guessWord){    
-    var lastGuessScore = Solver.ScoreGuessAgainstWord(guessWord, _word);
+    var lastGuessScore = WordGuesser.ScoreGuessAgainstWord(guessWord, _word);
 
     var nextGameState = lastGuessScore == WinScore?GameState.Won:GameState.InProgress;
 

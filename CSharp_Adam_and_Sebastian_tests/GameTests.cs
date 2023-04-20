@@ -43,11 +43,11 @@ public class GameTests
     var game = Game.NewGame("green");
     var guess = "first";
  
-    var solver = new Solver();
+    var wordGuesser = new WordGuesser();
     
     while (game.State == GameState.InProgress){  
       game = game.MakeGuess(guess);
-      guess = solver.GetNextGuess(guess, game.LastGuessScore);
+      guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore);
 
       System.Console.WriteLine($"Guess: {guess} Score:{game.LastGuessScore} State: {game.State}");
     }
