@@ -9,3 +9,7 @@ bin/
 
 /David_CSharp/bin/
 /David_Python/__pycache__/
+
+.fake
+
+.DS_Store
