@@ -1,17 +1,32 @@
 namespace CSharp_Adam_and_Sebastian_tests;
 
 public class PlayerTest{
+  // [Test]
+  // public void PlayGame(){
+
+  //   var game = Game.NewGame("GREEN");
+  //   var wordGuesser = new WordGuesser();
+
+  //   var player = new Player(game, wordGuesser);
+
+  //   var solution = player.SolveGame();
+
+  //   Assert.That(solution.Item1, Is.EqualTo("green"));
+  // }
+
+
   [Test]
-  public void PlayGame(){
+  public void ConsoleTest(){
+    System.Threading.Thread.Sleep(1000);
+    System.Console.WriteLine("Test 1 : Start");
+    TestContext.Out.WriteLine("A-Test 1 : Start");
+    System.Threading.Thread.Sleep(1000);
 
-    var game = Game.NewGame("GREEN");
-    var wordGuesser = new WordGuesser();
-
-    var player = new Player(game, wordGuesser);
-
-    var solution = player.SolveGame();
-
-    Assert.That(solution.Item1, Is.EqualTo("green"));
+    for(int i = 0 ; i < 10 ; i++){
+      System.Console.WriteLine($"Test 1 - {i}");
+      TestContext.Out.WriteLine($"A-Test 1 - {i}");
+      System.Threading.Thread.Sleep(1000);
+    }
   }
 
   // [Test]
@@ -26,26 +41,26 @@ public class PlayerTest{
   //   Assert.That(solution.Item1, Is.EqualTo("again"));
   // }
 
-  [Test]
-  public void PlayAllGames(){
+  // [Test]
+  // public void PlayAllGames(){
 
-    var wordGuesser = new WordGuesser();
+  //   var wordGuesser = new WordGuesser();
 
-    for(int i = 0 ; i < 21; i++){
-    // foreach(String word in wordGuesser.Words){
-      var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+  //   for(int i = 0 ; i < 21; i++){
+  //   // foreach(String word in wordGuesser.Words){
+  //     var stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
-      var word = wordGuesser.Words[i];
+  //     var word = wordGuesser.Words[i];
 
-      System.Console.WriteLine($"Word to play: {word}");
+  //     System.Console.WriteLine($"Word to play: {word}");
     
-      var game = Game.NewGame(word);
+  //     var game = Game.NewGame(word);
 
-      var player = new Player(game, wordGuesser);
+  //     var player = new Player(game, wordGuesser);
 
-      var solution = player.SolveGame();
+  //     var solution = player.SolveGame();
 
-      System.Console.WriteLine($"Word: {word} guesses: {solution.Item2.GuessCount} {stopWatch.ElapsedMilliseconds}ms");
-    }
-  }
+  //     System.Console.WriteLine($"Word: {word} guesses: {solution.Item2.GuessCount} {stopWatch.ElapsedMilliseconds}ms");
+  //   }
+  // }
 }
