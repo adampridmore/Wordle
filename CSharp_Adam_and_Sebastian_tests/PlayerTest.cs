@@ -1,7 +1,7 @@
 namespace CSharp_Adam_and_Sebastian_tests;
 
 public class PlayerTest{
-  // [Test]
+  // [Fact]
   // public void PlayGame(){
 
   //   var game = Game.NewGame("GREEN");
@@ -15,7 +15,7 @@ public class PlayerTest{
   // }
 
 
-  [Test]
+  [Xunit.Fact]
   public void ConsoleTest(){
     System.Threading.Thread.Sleep(1000);
     System.Console.WriteLine("Test 1 : Start");
@@ -29,7 +29,7 @@ public class PlayerTest{
     }
   }
 
-  // [Test]
+  // [Fact]
   // public void Fails_to_solve_word_again(){
   //   var game = Game.NewGame("again");
   //   var wordGuesser = new WordGuesser();
@@ -41,7 +41,7 @@ public class PlayerTest{
   //   Assert.That(solution.Item1, Is.EqualTo("again"));
   // }
 
-  // [Test]
+  // [Fact]
   // public void PlayAllGames(){
 
   //   var wordGuesser = new WordGuesser();

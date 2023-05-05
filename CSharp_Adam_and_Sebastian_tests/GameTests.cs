@@ -2,7 +2,7 @@ namespace CSharp_Adam_and_Sebastian_tests;
 
 public class GameTests
 {
-  [Test]
+  [Xunit.Fact]
   public void new_game(){
     var game = Game.NewGame("GREEN");
 
@@ -12,7 +12,7 @@ public class GameTests
     Assert.That(game.GuessCount, Is.EqualTo(0));
   }
 
-  [Test]
+  [Xunit.Fact]
   public void new_game_with_one_winning_guess()
   {
     var game = Game.NewGame("GREEN");
@@ -25,7 +25,7 @@ public class GameTests
     Assert.That(nextGuessGame.GuessCount, Is.EqualTo(1));
   }
 
-  [Test]
+  [Xunit.Fact]
   public void incorrect_guess()
   {
     var game = Game.NewGame("GREEN");

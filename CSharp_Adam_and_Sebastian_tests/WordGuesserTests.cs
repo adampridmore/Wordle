@@ -2,17 +2,18 @@ namespace CSharp_Adam_and_Sebastian_tests;
 
 public class WordGuesserTests
 {
-  [Test]
+  [Xunit.Fact]
   public void NoMatch()
   {
     var guess = "WORDS";
     var actualWord = "ZZZZZ";
     var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
+    // Assert.Equal("A","B");
     Assert.That(result, Is.EqualTo("     "));
   }
 
-  [Test]
+  [Xunit.Fact]
   public void FullMatch()
   {
     var guess = "WORDS";
@@ -23,7 +24,7 @@ public class WordGuesserTests
   }
 
   
-  [Test]
+  [Xunit.Fact]
   public void FullMatch_ignore_case()
   {
     var guess = "Words";
@@ -33,7 +34,7 @@ public class WordGuesserTests
     Assert.That(result, Is.EqualTo("GGGGG"));
   }
 
-  [Test]
+  [Xunit.Fact]
   public void OneYellowMatch()
   {
     var guess = "A     ";
@@ -43,7 +44,7 @@ public class WordGuesserTests
     Assert.That(result, Is.EqualTo("Y    "));
   }
 
-  [Test]
+  [Xunit.Fact]
   public void MixMatches(){
     var guess = "ABBZZ";
     var actualWord = "ABCDE";
@@ -52,7 +53,7 @@ public class WordGuesserTests
     Assert.That(result, Is.EqualTo("GGY  "));
   }
 
-  [Test]
+  [Xunit.Fact]
   public void GetNextGuess(){
     var solver = new WordGuesser();
 
@@ -61,7 +62,7 @@ public class WordGuesserTests
     Assert.That(nextGuess, Is.EqualTo(("winds")));
   }
 
-  // [Test]
+  // [Fact]
   // public void Dont_guess_same_word(){
 
   //   var wordGuesser = new WordGuesser(new List<string>() {"AAAAC", "AAAAD"});
@@ -70,7 +71,7 @@ public class WordGuesserTests
   //   Assert.That(nextGuess, Is.EqualTo("AAAAD"));
   // }
 
-    // [Test]
+    // [Fact]
     // public void FilterWordList() {
     //     var words = File.ReadAllLines("words.txt");
 
