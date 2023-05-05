@@ -14,31 +14,31 @@ public class PlayerTest{
   //   Assert.That(solution.Item1, Is.EqualTo("green"));
   // }
 
-
   [Xunit.Fact]
-  public void ConsoleTest(){
-    System.Threading.Thread.Sleep(1000);
-    System.Console.WriteLine("Test 1 : Start");
-    TestContext.Out.WriteLine("A-Test 1 : Start");
-    System.Threading.Thread.Sleep(1000);
+  public void Fails_to_solve_word_again(){
+    var game = Game.NewGame("again");
+    var wordGuesser = new WordGuesser();
 
-    for(int i = 0 ; i < 10 ; i++){
-      System.Console.WriteLine($"Test 1 - {i}");
-      TestContext.Out.WriteLine($"A-Test 1 - {i}");
-      System.Threading.Thread.Sleep(1000);
-    }
+    var player = new Player(game, wordGuesser);
+
+    var solution = player.SolveGame();
+
+    Assert.That(solution.Item1, Is.EqualTo("again"));
   }
 
-  // [Fact]
-  // public void Fails_to_solve_word_again(){
-  //   var game = Game.NewGame("again");
+  
+  // [Xunit.Fact]
+  // public void Score_all_words(){
+  //   var guess = "first";
   //   var wordGuesser = new WordGuesser();
-
-  //   var player = new Player(game, wordGuesser);
-
-  //   var solution = player.SolveGame();
-
-  //   Assert.That(solution.Item1, Is.EqualTo("again"));
+  //   wordGuesser.Words
+  //     .Select(word =>(word, WordGuesser.ScoreGuessAgainstWord(guess, word)))
+  //     .Where(wordGuess => new List<string>{"again", "which", "first"}.Contains(wordGuess.word))
+  //     .ToList().ForEach(wordSore => {
+  //       var (word, score) = wordSore;
+  //       System.Console.WriteLine($"{word} {score}");
+  //     })
+  //     ;
   // }
 
   // [Fact]

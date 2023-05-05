@@ -13,12 +13,17 @@ public class WordGuesser {
     Words = File.ReadAllLines("words.txt").ToList();
   }
 
-  public String GetNextGuess(String lastGuessWord, String lastResultScore) {
-    var filteredWords = Words
-                          .Where(word => WordGuesser.ScoreGuessAgainstWord(lastGuessWord, word) == lastResultScore)
-                          .Where(word => word != lastGuessWord)
-                          ;
-
+  public String GetNextGuess(String lastGuessWord, String lastResultScore, String[] previousGuesses) {
+    var filteredWords = 
+      Words.Where(word => {
+        return
+            WordGuesser.ScoreGuessAgainstWord(lastGuessWord, word) == lastResultScore
+            &&
+            (word != lastGuessWord)
+            &&
+            (!previousGuesses.Contains(word))
+            ;
+      });
 
     var nextGuess = filteredWords.FirstOrDefault();
 
@@ -41,7 +46,7 @@ public class WordGuesser {
     for(int i = 0 ; i < 5 ; i++){
       if (guessLowerCase[i] == wordLowerCase[i]){
         result[i] = 'G';
-      } else if (wordLowerCase.ToArray().Contains(guessLowerCase[i])) {
+      } else if (wordLowerCase.Contains(guessLowerCase[i])) {
         result[i] = 'Y';
       } else {
         result[i] = ' ';

@@ -17,19 +17,17 @@ public class Player{
  
     var wordGuesser = new WordGuesser();
     
-    // System.Console.WriteLine($"1");
-
     while (game.State == GameState.InProgress){  
       
-      // throw new System.Exception("bang!");
-      
-      // System.Console.WriteLine($"2");
       game = game.MakeGuess(guess);
-      // System.Console.WriteLine($"3");
-      guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore);
-      // System.Console.WriteLine($"3");
-
+      // System.Console.WriteLine($"Guess: [{guess}] score: [{game.LastGuessScore}]");
+      if (game.State == GameState.Won) continue;
+      
+      guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore, game.Guesses);
+      // System.Console.WriteLine($"NextGuess: [{guess}]");
+      
       // System.Threading.Thread.Sleep(System.TimeSpan.FromMilliseconds(100));
+      
       // System.Console.WriteLine($"Guess: {guess} Score:{game.LastGuessScore} State: {game.State}");
     }
 

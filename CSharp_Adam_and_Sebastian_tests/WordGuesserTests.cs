@@ -9,7 +9,6 @@ public class WordGuesserTests
     var actualWord = "ZZZZZ";
     var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
-    // Assert.Equal("A","B");
     Assert.That(result, Is.EqualTo("     "));
   }
 
@@ -56,13 +55,16 @@ public class WordGuesserTests
   [Xunit.Fact]
   public void GetNextGuess(){
     var solver = new WordGuesser();
+    var previousGuesses = new String[]{};
 
-    var nextGuess = solver.GetNextGuess("words", "G  GG");
+    var nextGuess = solver.GetNextGuess("words", "G  GG", previousGuesses);
 
     Assert.That(nextGuess, Is.EqualTo(("winds")));
   }
 
-  // [Fact]
+  // TODO: Test if previousGuesses contains word
+
+  // [Xunit.Fact]
   // public void Dont_guess_same_word(){
 
   //   var wordGuesser = new WordGuesser(new List<string>() {"AAAAC", "AAAAD"});
