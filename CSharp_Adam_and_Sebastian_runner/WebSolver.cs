@@ -5,14 +5,16 @@ using Wordle.Models;
 public static class WebSolver{
   static public string localBaseUrl = "http://localhost:5130";
   static readonly Api Api = new Api(localBaseUrl);
+
+
   public static async Task Run(){
     try
     {
-      if (!File.Exists("words.txt"))
-      {
-        await Api.DownloadWords("words.txt");
-        Console.WriteLine("Downloaded word list");
-      }
+      // if (!File.Exists("words.txt"))
+      // {
+      //   await Api.DownloadWords("words.txt");
+      //   Console.WriteLine("Downloaded word list");
+      // }
 
       // var teamId = await Api.RegisterTeam("Example");
       // Console.WriteLine(teamId);
@@ -26,6 +28,11 @@ public static class WebSolver{
       var gameId = await Api.StartNewGame(teamId);
       Console.WriteLine("GameId: " + gameId);
 
+    
+      var wordGuesser = new WordGuesser();
+      var player = new Player(game, wordGuesser);
+      player.SolveGame();
+  
       var firstGuess = "words";
 
       var newGuessResponse = await  Api.GuessWord(gameId, firstGuess);

@@ -2,9 +2,21 @@ namespace Wordle;
 
 using Wordle.Models;
 
+public interface IGame{
+  GameState State {get;}
+
+  string LastGuessScore { get; }
+
+  String[] Guesses {get; }
+
+  int GuessCount { get; }
+
+  Game MakeGuess(string guessWord);
+}
+
 public class Player{
 
-  public Game Game {get;}
+  public IGame Game {get;}
   private readonly WordGuesser _wordGuesser;
   private readonly bool _logging;
 
@@ -14,13 +26,13 @@ public class Player{
     }
   }
   
-  public Player(Game game, WordGuesser wordGuesser, bool logging = false){
+  public Player(IGame game, WordGuesser wordGuesser,  bool logging = false){
     Game = game;
     _wordGuesser = wordGuesser;
     _logging = logging;
   }
   
-  public (string, Game) SolveGame(){
+  public (string, IGame) SolveGame(){
     var game = Game;
     
     var guess = "first";

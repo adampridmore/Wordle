@@ -2,7 +2,7 @@ namespace Wordle;
 
 using Wordle.Models;
 
-public class Game {
+public class Game : IGame {
 
   private const string WinScore = "GGGGG";
   public GameState State { get; }
