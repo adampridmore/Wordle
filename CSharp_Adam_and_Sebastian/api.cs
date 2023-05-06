@@ -5,7 +5,11 @@ using Wordle.Models;
 
 public class Api
 {
-  const string BaseUrl = "https://yorkcodedojowordleapi.azurewebsites.net";
+  private string BaseUrl {get; }
+  public Api(string baseUrl = "https://yorkcodedojowordleapi.azurewebsites.net"){
+    BaseUrl = baseUrl;
+  }
+
   static readonly HttpClient Client = new HttpClient();
 
   public async Task<Guid> RegisterTeam(string teamName)
@@ -45,7 +49,7 @@ public class Api
 
   public async Task DownloadWords(string path)
   {
-    const string url = $"{BaseUrl}/words.txt";
+    string url = $"{BaseUrl}/words.txt";
     var response = await Client.GetAsync(url);
     response.EnsureSuccessStatusCode();
     var stream = await response.Content.ReadAsStreamAsync();

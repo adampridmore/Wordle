@@ -3,7 +3,8 @@ namespace Wordle;
 using Wordle.Models;
 
 public static class WebSolver{
-  static readonly Api Api = new Api();
+  static public string localBaseUrl = "http://localhost:5130";
+  static readonly Api Api = new Api(localBaseUrl);
   public static async Task Run(){
     try
     {
@@ -16,7 +17,11 @@ public static class WebSolver{
       // var teamId = await Api.RegisterTeam("Example");
       // Console.WriteLine(teamId);
 
-      var teamId = new System.Guid("d24641c0-0fec-457b-b257-19344790aad9"); // SeeSharpers
+      // Real tema
+      // var teamId = new System.Guid("d24641c0-0fec-457b-b257-19344790aad9"); // SeeSharpers
+      
+      // local team
+      var teamId = new System.Guid("066994ae-0a1a-4e6c-90a4-0a478e5c8155"); // SeeSharpers
 
       var gameId = await Api.StartNewGame(teamId);
       Console.WriteLine("GameId: " + gameId);
