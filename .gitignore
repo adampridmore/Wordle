@@ -13,3 +13,5 @@ bin/
 .fake
 
 .DS_Store
+
+CSharp_Adam_and_Sebastian_runner/words-solve-count.csv
