@@ -15,11 +15,11 @@ public class GameTests
   }
 
   [Xunit.Fact]
-  public void new_game_with_one_winning_guess()
+  public async Task new_game_with_one_winning_guess()
   {
     var game = Game.NewGame("GREEN");
 
-    var nextGuessGame = game.MakeGuess("GREEN");
+    var nextGuessGame = await game.MakeGuess("GREEN");
     
     Assert.That(nextGuessGame.State, Is.EqualTo(GameState.Won));
     Assert.That(nextGuessGame.LastGuessScore, Is.EqualTo("GGGGG"));
@@ -28,11 +28,11 @@ public class GameTests
   }
 
   [Xunit.Fact]
-  public void incorrect_guess()
+  public async Task incorrect_guess()
   {
     var game = Game.NewGame("GREEN");
 
-    var nextGuessGame = game.MakeGuess("PAPER");
+    var nextGuessGame = await game.MakeGuess("PAPER");
     
     Assert.That(nextGuessGame.State, Is.EqualTo(GameState.InProgress));
     Assert.That(nextGuessGame.LastGuessScore, Is.EqualTo("   GY"));

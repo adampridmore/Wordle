@@ -11,7 +11,7 @@ public interface IGame{
 
   int GuessCount { get; }
 
-  Game MakeGuess(string guessWord);
+  Task<Game> MakeGuess(string guessWord);
 }
 
 public class Player{
@@ -32,7 +32,7 @@ public class Player{
     _logging = logging;
   }
   
-  public (string, IGame) SolveGame(){
+  public async Task<(string, IGame)> SolveGame(){
     var game = Game;
     
     var guess = "first";
@@ -41,7 +41,7 @@ public class Player{
     
     while (game.State == GameState.InProgress){  
       
-      game = game.MakeGuess(guess);
+      game = await game.MakeGuess(guess);
       
       WriteLine($"Guess: [{guess}] score: [{game.LastGuessScore}]");
       if (game.State == GameState.Won) continue;
@@ -56,6 +56,7 @@ public class Player{
       WriteLine($"Guess: [{guess}] Score:{game.LastGuessScore} State: {game.State}");
     }
 
-    return (guess, game);
+    (string, IGame) result = (guess, game);
+    return result;
   }
 }
