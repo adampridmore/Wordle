@@ -4,10 +4,18 @@ public class Player{
 
   public Game Game {get;}
   private readonly WordGuesser _wordGuesser;
+  private readonly bool _logging;
+
+  private void WriteLine(string message) {
+    if (_logging) {
+      System.Console.WriteLine(message);
+    }
+  }
   
-  public Player(Game game, WordGuesser wordGuesser){
+  public Player(Game game, WordGuesser wordGuesser, bool logging = false){
     Game = game;
     _wordGuesser = wordGuesser;
+    _logging = logging;
   }
   
   public (string, Game) SolveGame(){
@@ -20,15 +28,18 @@ public class Player{
     while (game.State == GameState.InProgress){  
       
       game = game.MakeGuess(guess);
-      // System.Console.WriteLine($"Guess: [{guess}] score: [{game.LastGuessScore}]");
+      
+      WriteLine($"Guess: [{guess}] score: [{game.LastGuessScore}]");
       if (game.State == GameState.Won) continue;
       
       guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore, game.Guesses);
-      // System.Console.WriteLine($"NextGuess: [{guess}]");
+      WriteLine($"NextGuess: [{guess}]");
       
-      // System.Threading.Thread.Sleep(System.TimeSpan.FromMilliseconds(100));
+      if (_logging) {
+        System.Threading.Thread.Sleep(System.TimeSpan.FromMilliseconds(100));
+      }
       
-      // System.Console.WriteLine($"Guess: {guess} Score:{game.LastGuessScore} State: {game.State}");
+      WriteLine($"Guess: [{guess}] Score:{game.LastGuessScore} State: {game.State}");
     }
 
     return (guess, game);

@@ -41,16 +41,16 @@ public class PlayerTest{
   //     ;
   // }
 
-  // [Fact]
+  // [Xunit.Fact]
   // public void PlayAllGames(){
 
   //   var wordGuesser = new WordGuesser();
 
-  //   for(int i = 0 ; i < 21; i++){
-  //   // foreach(String word in wordGuesser.Words){
+  //   // for(int i = 0 ; i < 21; i++){
+  //   foreach(String word in wordGuesser.Words){
   //     var stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
-  //     var word = wordGuesser.Words[i];
+  //     // var word = wordGuesser.Words[i];
 
   //     System.Console.WriteLine($"Word to play: {word}");
     
