@@ -27,13 +27,13 @@ public class Game : IGame {
     Guesses = guesses;
   }
 
-  public Task<Game> MakeGuess(string guessWord){    
+  public Task<IGame> MakeGuess(string guessWord){    
     var lastGuessScore = WordGuesser.ScoreGuessAgainstWord(guessWord, _word);
 
     var nextGameState = lastGuessScore == WinScore?GameState.Won:GameState.InProgress;
 
     var newGuesses = Guesses.Append(guessWord).ToArray();
 
-    return Task.FromResult(new Game(_word, GuessCount+1, lastGuessScore, nextGameState, newGuesses));
+    return Task.FromResult<IGame>(new Game(_word, GuessCount+1, lastGuessScore, nextGameState, newGuesses));
   }
 }

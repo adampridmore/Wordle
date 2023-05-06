@@ -11,7 +11,7 @@ public interface IGame{
 
   int GuessCount { get; }
 
-  Task<Game> MakeGuess(string guessWord);
+  Task<IGame> MakeGuess(string guessWord);
 }
 
 public class Player{

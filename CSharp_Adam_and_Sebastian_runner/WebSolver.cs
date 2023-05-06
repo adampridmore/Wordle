@@ -2,63 +2,73 @@ namespace Wordle;
 
 using Wordle.Models;
 
-public static class WebSolver{
-  static public string localBaseUrl = "http://localhost:5130";
-  static readonly Api Api = new Api(localBaseUrl);
-
-
-  public static async Task Run(){
-    try
-    {
-      // if (!File.Exists("words.txt"))
-      // {
-      //   await Api.DownloadWords("words.txt");
-      //   Console.WriteLine("Downloaded word list");
-      // }
-
-      // var teamId = await Api.RegisterTeam("Example");
-      // Console.WriteLine(teamId);
-
-      // Real tema
-      // var teamId = new System.Guid("d24641c0-0fec-457b-b257-19344790aad9"); // SeeSharpers
-      
-      // local team
-      var teamId = new System.Guid("066994ae-0a1a-4e6c-90a4-0a478e5c8155"); // SeeSharpers
-
-      var gameId = await Api.StartNewGame(teamId);
-      Console.WriteLine("GameId: " + gameId);
-
-    
-      var wordGuesser = new WordGuesser();
-      var player = new Player(game, wordGuesser);
-      player.SolveGame();
+public class WebGame : IGame
+{
+  // Real team
+  // var teamId = new System.Guid("d24641c0-0fec-457b-b257-19344790aad9"); // SeeSharpers
   
-      var firstGuess = "words";
+  // local team
+  private Guid teamId = new System.Guid("066994ae-0a1a-4e6c-90a4-0a478e5c8155"); // SeeSharpers
 
-      var newGuessResponse = await  Api.GuessWord(gameId, firstGuess);
+  private const string localBaseUrl = "http://localhost:5130";
+  private Api Api = new Api(localBaseUrl);
+
+  public GameState State {get; private set;}
+
+  public string LastGuessScore { get; private set; }
+
+  public String[] Guesses {get; private set; }
+
+  public int GuessCount { get; set;}
+
+  private Guid _gameId;
+  private WordGuesser _wordGuesser;
+
+  public async Task<IGame> MakeGuess(string guessWord){
+
+    string nextGuess;
+    if (GuessCount == 0){
+      _gameId = await Api.StartNewGame(teamId);
+      Console.WriteLine("GameId: " + _gameId);
+      nextGuess = "first";
+    } else {
+      nextGuess = _wordGuesser.GetNextGuess(Guesses.Last(),LastGuessScore, Guesses);
+    }
+
+    NewGuessResponse newGuessResponse = await Api.GuessWord(_gameId,nextGuess);
+    LastGuessScore = newGuessResponse.Score;
+    State = newGuessResponse.State;
+    Guesses = Guesses.ToList().Append(nextGuess).ToArray();
+    GuessCount++;
+
+    return this;
+  }
+  
+  public WebGame(WordGuesser wordGuesser){
+    LastGuessScore = "";
+    _wordGuesser = wordGuesser;
+    Guesses = new List<string>().ToArray();
+    GuessCount = 0;
+  }
+}
+
+public static class WebSolver{
+
+  
+  
+  public static async Task Run(){
       
-      Console.WriteLine("newGuessResponse: " + newGuessResponse);
+    var wordGuesser = new WordGuesser();
 
-      var solver = new WordGuesser(File.ReadAllLines("words.txt").ToList());
+    var webGame = new WebGame(wordGuesser);
+
+    var player = new Player(webGame, wordGuesser);
     
-      // TODO: Fix previousGuesses array
-      var nextGuess = solver.GetNextGuess(firstGuess, newGuessResponse.Score, new String[]{});
-      Console.WriteLine($"Score: {newGuessResponse.Score} NextGuess: {nextGuess}");
-      
-      while(newGuessResponse.State == GameState.InProgress){
-        
-        // TODO: Fix previousGuesses array
-        nextGuess = solver.GetNextGuess(nextGuess, newGuessResponse.Score, new String[]{});
+    (string, IGame) solution = await player.SolveGame();
 
-        newGuessResponse = await Api.GuessWord(gameId, nextGuess);
+    var message = $"Answer: {solution.Item1} guess count: {solution.Item2.GuessCount} guesses: {String.Join(",",solution.Item2.Guesses)}";
 
-        Console.WriteLine($"Score: {newGuessResponse.Score} NextGuess: {nextGuess} State: {newGuessResponse.State}");
-      } 
-    }
-    catch (Exception e)
-    {
-      Console.WriteLine("\nException Caught!");
-      Console.WriteLine("Message :{0} ", e.Message);
-    }
+
+    System.Console.WriteLine(message);
   }
 }
