@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordleAPI", "WordleAPI\Word
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordleAPI.Tests", "WordleAPI.Tests\WordleAPI.Tests.csproj", "{D7526C3F-EEC1-4FCD-900B-C70D7E64F886}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_Adam_and_Sebastian", "CSharp_Adam_and_Sebastian\CSharp_Adam_and_Sebastian.csproj", "{CC9965CF-18A4-4D1B-AB41-3D72E096CFA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_Adam_and_Sebastian_tests", "CSharp_Adam_and_Sebastian_tests\CSharp_Adam_and_Sebastian_tests.csproj", "{7364EBE0-A9A7-499E-9959-DF45649B86EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp_Adam_and_Sebastian_runner", "CSharp_Adam_and_Sebastian_runner\CSharp_Adam_and_Sebastian_runner.csproj", "{8915F6B3-C5FA-4A90-886C-9C753D8D7A29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{D7526C3F-EEC1-4FCD-900B-C70D7E64F886}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7526C3F-EEC1-4FCD-900B-C70D7E64F886}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7526C3F-EEC1-4FCD-900B-C70D7E64F886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC9965CF-18A4-4D1B-AB41-3D72E096CFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC9965CF-18A4-4D1B-AB41-3D72E096CFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC9965CF-18A4-4D1B-AB41-3D72E096CFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC9965CF-18A4-4D1B-AB41-3D72E096CFA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7364EBE0-A9A7-499E-9959-DF45649B86EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7364EBE0-A9A7-499E-9959-DF45649B86EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7364EBE0-A9A7-499E-9959-DF45649B86EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7364EBE0-A9A7-499E-9959-DF45649B86EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8915F6B3-C5FA-4A90-886C-9C753D8D7A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8915F6B3-C5FA-4A90-886C-9C753D8D7A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8915F6B3-C5FA-4A90-886C-9C753D8D7A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8915F6B3-C5FA-4A90-886C-9C753D8D7A29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
