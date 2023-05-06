@@ -1,4 +1,4 @@
-using David_CSharp.Models;
+namespace Wordle.Models;
 
 public class NewGuessResponse
 {

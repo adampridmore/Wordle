@@ -1,4 +1,4 @@
-namespace CSharp_Adam_and_Sebastian_tests;
+namespace Wordle;
 
 public class WordGuesserTests
 {
@@ -7,7 +7,7 @@ public class WordGuesserTests
   {
     var guess = "WORDS";
     var actualWord = "ZZZZZ";
-    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
+    var result = Wordle.WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
 
     Assert.That(result, Is.EqualTo("     "));
   }

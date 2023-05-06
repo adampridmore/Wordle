@@ -1,3 +1,5 @@
+namespace Wordle;
+
 using System.Collections;
 using System;
 

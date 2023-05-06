@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../CSharp_Adam_and_Sebastian/CSharp_Adam_and_Sebastian.csproj" />
+
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     
     <PackageReference Include="NUnit" Version="3.13.3" />

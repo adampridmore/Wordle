@@ -1,11 +1,6 @@
-namespace CSharp_Adam_and_Sebastian_tests;
+namespace Wordle;
 
-public enum GameState
-{
-  InProgress,
-  Won,
-  Lost
-}
+using Wordle.Models;
 
 public class Game {
 

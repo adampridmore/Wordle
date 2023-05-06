@@ -1,3 +1,5 @@
+namespace Wordle.Models;
+
 public class NewTeamResponse
 {
     public Guid Id { get; set; }

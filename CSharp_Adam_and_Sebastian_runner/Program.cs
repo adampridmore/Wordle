@@ -1,5 +1,6 @@
 ﻿
-using David_CSharp.Models;
+using Wordle.Models;
+using Wordle;
 
 public static class Program
 {
@@ -18,8 +19,6 @@ public static class Program
       // var teamId = await Api.RegisterTeam("Example");
       // Console.WriteLine(teamId);
 
-
-      
       var teamId = new System.Guid("d24641c0-0fec-457b-b257-19344790aad9"); // SeeSharpers
 
       var gameId = await Api.StartNewGame(teamId);
@@ -31,13 +30,16 @@ public static class Program
       
       Console.WriteLine("newGuessResponse: " + newGuessResponse);
 
-      var solver = new Solver(File.ReadAllLines("words.txt").ToList());
+      var solver = new WordGuesser(File.ReadAllLines("words.txt").ToList());
     
-      var nextGuess = solver.GetNextGuess(firstGuess, newGuessResponse.Score);
+      // TODO: Fix previousGuesses array
+      var nextGuess = solver.GetNextGuess(firstGuess, newGuessResponse.Score, new String[]{});
       Console.WriteLine($"Score: {newGuessResponse.Score} NextGuess: {nextGuess}");
       
       while(newGuessResponse.State == GameState.InProgress){
-        nextGuess = solver.GetNextGuess(nextGuess, newGuessResponse.Score);
+        
+        // TODO: Fix previousGuesses array
+        nextGuess = solver.GetNextGuess(nextGuess, newGuessResponse.Score, new String[]{});
 
         newGuessResponse = await Api.GuessWord(gameId, nextGuess);
 

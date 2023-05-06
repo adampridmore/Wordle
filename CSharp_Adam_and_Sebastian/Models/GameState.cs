@@ -1,5 +1,4 @@
-namespace David_CSharp.Models;
-
+namespace Wordle.Models;
 public enum GameState
 {
   InProgress,

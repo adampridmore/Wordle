@@ -1,5 +1,7 @@
+namespace Wordle;
+
 using System.Net.Http.Json;
-using David_CSharp.Models;
+using Wordle.Models;
 
 public class Api
 {

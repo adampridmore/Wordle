@@ -1,4 +1,6 @@
-namespace CSharp_Adam_and_Sebastian_tests;
+namespace Wordle;
+
+using Wordle.Models;
 
 public class GameTests
 {
