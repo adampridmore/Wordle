@@ -40,6 +40,14 @@ public class WordGuesser {
     return nextGuess;
   }
 
+
+  // TODO: fix scoring
+  // Need to have two flavours. One to match the API implementation and one to match the real implementation
+  // regarding the scoring of 
+  // word             first
+  // Guess            aaiit
+  // API Score          YY    Counts both i's as a Y
+  // Real score         Y     Counts first i as a Y
   public static String ScoreGuessAgainstWord(string guess, string word) {
     var guessLowerCase = guess.ToLowerInvariant();
     var wordLowerCase = word.ToLowerInvariant();
