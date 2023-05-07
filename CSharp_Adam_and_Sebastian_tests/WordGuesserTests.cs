@@ -53,6 +53,15 @@ public class WordGuesserTests
   }
 
   [Xunit.Fact]
+  public void YellowForFirstMatch(){
+    var guess = "BBCCC";
+    var actualWord = "CXXXX";
+    var result = WordGuesser.ScoreGuessAgainstWord(guess, actualWord);
+
+    Assert.That(result, Is.EqualTo("  Y  "));
+  }
+
+  [Xunit.Fact]
   public void GetNextGuess(){
     var solver = new WordGuesser();
     var previousGuesses = new String[]{};

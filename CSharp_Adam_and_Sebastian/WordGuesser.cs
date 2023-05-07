@@ -49,14 +49,17 @@ public class WordGuesser {
   // API Score          YY    Counts both i's as a Y
   // Real score         Y     Counts first i as a Y
   public static String ScoreGuessAgainstWord(string guess, string word) {
-    var guessLowerCase = guess.ToLowerInvariant();
-    var wordLowerCase = word.ToLowerInvariant();
+    var guessLowerCase = guess.ToLowerInvariant().ToArray();
+    var wordLowerCase = word.ToLowerInvariant().ToArray();
     
     var result = new char[5];
     for(int i = 0 ; i < 5 ; i++){
+      // System.Console.WriteLine($"wordLowerCase: [{new String(wordLowerCase)}]");
       if (guessLowerCase[i] == wordLowerCase[i]){
         result[i] = 'G';
       } else if (wordLowerCase.Contains(guessLowerCase[i])) {
+        int matchIndex = Array.IndexOf(wordLowerCase, guessLowerCase[i]);
+        wordLowerCase[matchIndex] = '.';
         result[i] = 'Y';
       } else {
         result[i] = ' ';
