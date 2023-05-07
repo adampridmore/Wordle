@@ -73,6 +73,8 @@ public class WordGuesserTests
 
   // TODO: Test if previousGuesses contains word
 
+  // TODO: Don't guess words with letters that have no match
+
   // [Xunit.Fact]
   // public void Dont_guess_same_word(){
 
