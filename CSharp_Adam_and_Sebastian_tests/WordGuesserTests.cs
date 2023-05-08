@@ -66,9 +66,25 @@ public class WordGuesserTests
     var solver = new WordGuesser();
     var previousGuesses = new String[]{};
 
-    var nextGuess = solver.GetNextGuess("words", "G  GG", previousGuesses);
+    var invalidLetters = "i";
 
-    Assert.That(nextGuess, Is.EqualTo(("winds")));
+    var nextGuess = solver.GetNextGuess("words", "G  GG", previousGuesses, invalidLetters);
+
+    Assert.That(nextGuess, Is.EqualTo(("weeds")));
+  }
+
+  [Xunit.Fact]
+  public void WordContainsAnyOfTheseLetters(){
+    Assert.That(WordGuesser.WordContainsAnyLetters("apple","a"), Is.True,"a");
+    Assert.That(WordGuesser.WordContainsAnyLetters("apple","b"), Is.False,"b");
+    Assert.That(WordGuesser.WordContainsAnyLetters("apple","xp"), Is.True, "xp");
+    Assert.That(WordGuesser.WordContainsAnyLetters("apple",""), Is.False, "");
+  }
+
+  [Xunit.Fact]
+  public void GetInvalidLettersFromGuess(){
+    Assert.That(WordGuesser.GetInvalidLetters("abcde", "     "), Is.EqualTo("abcde"));
+    Assert.That(WordGuesser.GetInvalidLetters("abcde", " GGY "), Is.EqualTo("ae"));
   }
 
   // TODO: Test if previousGuesses contains word

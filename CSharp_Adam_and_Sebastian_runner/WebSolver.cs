@@ -17,6 +17,8 @@ public class WebGame : IGame
 
   public string LastGuessScore { get; private set; }
 
+  public string InvalidCharacters {get;set;}
+
   public String[] Guesses {get; private set; }
 
   public int GuessCount { get; set;}
@@ -32,10 +34,11 @@ public class WebGame : IGame
       Console.WriteLine("GameId: " + _gameId);
       nextGuess = "first";
     } else {
-      nextGuess = _wordGuesser.GetNextGuess(Guesses.Last(),LastGuessScore, Guesses);
+      nextGuess = _wordGuesser.GetNextGuess(Guesses.Last(),LastGuessScore, Guesses, InvalidCharacters);
     }
 
     NewGuessResponse newGuessResponse = await Api.GuessWord(_gameId,nextGuess);
+    InvalidCharacters = InvalidCharacters + WordGuesser.GetInvalidLetters(nextGuess, LastGuessScore);
     LastGuessScore = newGuessResponse.Score;
     State = newGuessResponse.State;
     Guesses = Guesses.ToList().Append(nextGuess).ToArray();
@@ -45,6 +48,7 @@ public class WebGame : IGame
   }
   
   public WebGame(WordGuesser wordGuesser){
+    InvalidCharacters = "";
     LastGuessScore = "";
     _wordGuesser = wordGuesser;
     Guesses = new List<string>().ToArray();

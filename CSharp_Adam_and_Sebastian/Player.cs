@@ -7,6 +7,8 @@ public interface IGame{
 
   string LastGuessScore { get; }
 
+  string InvalidCharacters { get; set;}
+
   String[] Guesses {get; }
 
   int GuessCount { get; }
@@ -42,18 +44,19 @@ public class Player{
     while (game.State == GameState.InProgress){  
       
       game = await game.MakeGuess(guess);
-      
-      WriteLine($"Guess: [{guess}] score: [{game.LastGuessScore}]");
+     
+      WriteLine($"Guess: [{guess}] score: [{game.LastGuessScore}] InvalidChars: {game.InvalidCharacters}");
       if (game.State == GameState.Won) continue;
       
-      guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore, game.Guesses);
+      guess = wordGuesser.GetNextGuess(guess, game.LastGuessScore, game.Guesses, game.InvalidCharacters);
+      
       WriteLine($"NextGuess: [{guess}]");
       
       if (_logging) {
         System.Threading.Thread.Sleep(System.TimeSpan.FromMilliseconds(100));
       }
       
-      WriteLine($"Guess: [{guess}] Score:{game.LastGuessScore} State: {game.State}");
+      // WriteLine($"Guess: [{guess}] Score:{game.LastGuessScore} State: {game.State}");
     }
 
     (string, IGame) result = (guess, game);

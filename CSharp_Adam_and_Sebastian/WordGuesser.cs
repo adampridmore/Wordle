@@ -15,10 +15,12 @@ public class WordGuesser {
     Words = File.ReadAllLines("words.txt").ToList();
   }
 
-  public String GetNextGuess(String lastGuessWord, String lastResultScore, String[] previousGuesses) {
+  public String GetNextGuess(String lastGuessWord, String lastResultScore, String[] previousGuesses, string invalidLetters) {
     var filteredWords = 
       Words.Where(word => {
         return
+            !WordGuesser.WordContainsAnyLetters(word, invalidLetters)
+            &&
             WordGuesser.ScoreGuessAgainstWord(lastGuessWord, word) == lastResultScore
             &&
             (word != lastGuessWord)
@@ -67,5 +69,24 @@ public class WordGuesser {
     }
 
     return new String(result);
+  }
+
+  public static bool WordContainsAnyLetters(string word, string letters)
+  {
+    return 
+      word.ToArray()
+        .Where(wordLetter => letters.Contains(wordLetter))
+        .Any();
+  }
+
+  public static string GetInvalidLetters(string guess, string score)
+  {
+    var invalidLetters =
+      guess.ToArray()
+        .Select( (letter, index) => (letter, index) )
+        .Where( (letter, index) => score[index] == ' ')
+        .Select ( x => x.letter )
+        ;
+    return new String(invalidLetters.ToArray());
   }
 }

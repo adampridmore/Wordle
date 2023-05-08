@@ -9,6 +9,8 @@ public class ConsoleGame : IGame{
 
   public string LastGuessScore { get; }
 
+  public string InvalidCharacters {get;set;}
+
   public String[] Guesses {get; }
 
   public int GuessCount { get; }
@@ -18,6 +20,7 @@ public class ConsoleGame : IGame{
   }
 
   private ConsoleGame(int guessCount, string lastGuessScore, GameState state, string [] guesses){
+    InvalidCharacters = "";
     GuessCount = guessCount;
     LastGuessScore = lastGuessScore;
     State = state;
@@ -33,6 +36,7 @@ public class ConsoleGame : IGame{
 
     var newGuesses = Guesses.Append(guessWord).ToArray();
 
+    // TODO : Something to do with invalid characters
     return Task.FromResult<IGame>(new ConsoleGame(GuessCount+1, lastGuessScore, nextGameState, newGuesses));
   }
 }

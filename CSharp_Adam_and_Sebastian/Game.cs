@@ -9,6 +9,8 @@ public class Game : IGame {
 
   public string LastGuessScore { get; }
 
+  public string InvalidCharacters {get;set;}
+
   public String[] Guesses {get; }
 
   public int GuessCount { get; }
@@ -16,10 +18,17 @@ public class Game : IGame {
   private readonly string _word;
 
   public static Game NewGame(string word){
-    return new Game(word, 0, "", GameState.InProgress, new String[] {});
+    return new Game(
+      word,
+      0,
+      "",
+      GameState.InProgress,
+      new String[] {},
+      "");
   }
 
-  private Game(string word, int guessCount, string lastGuessScore, GameState state, string [] guesses){
+  private Game(string word, int guessCount, string lastGuessScore, GameState state, string [] guesses, String invalidCharacters){
+    InvalidCharacters = invalidCharacters;
     _word = word;
     GuessCount = guessCount;
     LastGuessScore = lastGuessScore;
@@ -29,11 +38,18 @@ public class Game : IGame {
 
   public Task<IGame> MakeGuess(string guessWord){    
     var lastGuessScore = WordGuesser.ScoreGuessAgainstWord(guessWord, _word);
+    var invalidCharacters = InvalidCharacters + WordGuesser.GetInvalidLetters(guessWord, lastGuessScore);
 
     var nextGameState = lastGuessScore == WinScore?GameState.Won:GameState.InProgress;
 
     var newGuesses = Guesses.Append(guessWord).ToArray();
 
-    return Task.FromResult<IGame>(new Game(_word, GuessCount+1, lastGuessScore, nextGameState, newGuesses));
+    return Task.FromResult<IGame>(new Game(
+      _word,
+      GuessCount+1,
+      lastGuessScore,
+      nextGameState,
+      newGuesses,
+      invalidCharacters));
   }
 }

@@ -27,4 +27,18 @@ public class PlayerTest{
 
     Assert.That(solution.Item1, Is.EqualTo("again"));
   }
+
+
+  [Xunit.Fact]
+  public async Task Fails_to_solve_word_other(){
+    var game = Game.NewGame("other");
+    var wordGuesser = new WordGuesser();
+
+    var player = new Player(game, wordGuesser, true);
+
+    var solution = await player.SolveGame();
+
+    Assert.That(solution.Item1, Is.EqualTo("other"));
+  }
+  
 }

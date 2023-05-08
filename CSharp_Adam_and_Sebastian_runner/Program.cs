@@ -9,8 +9,8 @@ public static class Program
   {
     // await WebSolver.Run();
 
-    // await PlayAllGames.Run();
+    await PlayAllGames.Run();
 
-    await ConsolePlayer.Run();
+    // await ConsolePlayer.Run();
   }
 }
