@@ -2,14 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    },
-    {
       "name": ".NET Core Launch (console)",
       "type": "coreclr",
       "request": "launch",
@@ -19,6 +11,18 @@
       "cwd": "${workspaceFolder}/David_CSharp",
       "stopAtEntry": true,
       "console": "internalConsole"
+    },
+    {
+      "name": "CSharp_Adam_and_Sebastian_runner",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/CSharp_Adam_and_Sebastian_runner/bin/Debug/net7.0/CSharp_Adam_and_Sebastian_runner.dll",
+      
+      "args": [],
+      "cwd": "${workspaceFolder}/CSharp_Adam_and_Sebastian_runner",
+      "stopAtEntry": true,
+      "console": "integratedTerminal",
     },
     {
       // Use IntelliSense to find out which attributes exist for C# debugging
