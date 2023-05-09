@@ -87,6 +87,11 @@ public class WordGuesserTests
     Assert.That(WordGuesser.GetInvalidLetters("abcde", " GGY "), Is.EqualTo("ae"));
   }
 
+  [Xunit.Fact]
+  public void GetInvalidLettersFromGuessWithDuplicateLetters(){
+    Assert.That(WordGuesser.GetInvalidLetters("aabcd", "y    "), Is.EqualTo("bcd"));
+  }
+
   // TODO: Test if previousGuesses contains word
 
   // TODO: Don't guess words with letters that have no match

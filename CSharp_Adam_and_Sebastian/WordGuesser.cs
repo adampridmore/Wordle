@@ -81,12 +81,16 @@ public class WordGuesser {
 
   public static string GetInvalidLetters(string guess, string score)
   {
-    var invalidLetters =
+    IGrouping<char, char>[] letterAndScores =
       guess.ToArray()
-        .Select( (letter, index) => (letter, index) )
-        .Where( (letter, index) => score[index] == ' ')
-        .Select ( x => x.letter )
-        ;
+        .Select( (letter, index) => (letter, score[index]))
+        .GroupBy(x=>x.letter, x=>x.Item2)
+        .ToArray();
+
+    var invalidLetters = letterAndScores
+      .Where(g => g.All(score => score == ' '))
+      .Select(g => g.Key);
+    
     return new String(invalidLetters.ToArray());
   }
 }
